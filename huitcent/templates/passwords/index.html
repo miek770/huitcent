@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Mots de passe</div>
+  <div class="menu_items">
+   <a href="/passwords/new/">Nouveau groupe</a>
+   {% if group_list %}
+    <br /><br />
+    {% for group in group_list %}
+     <a href="/passwords/{{ group.id }}/">{{ group.name }}</a>
+     {% if group.details %}
+      - {{ group.details }}
+     {% endif %}<br />
+    {% endfor %}
+   {% endif %}
+  </div>
+ </div>
+{% endblock %}

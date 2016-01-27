@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var name = document.forms["thread"]["name"].value;
+    if (name == null || name == "")
+    {
+     alert("Vous devez entrer un nom de discussion.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/new_thread/">Nouvelle discussion</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/new_post/">Nouveau message</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > <a href="/forum/{{ forum.id }}/{{ topic.id }}/">{{ topic.name }}</a>
+   > <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/">{{ thread.name }}</a>
+   > Modifier message
+  </div><br />
+  <div class="menu_items">
+   <form name="thread" action="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/do_edit/" method="post" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="name">Nom</label><br />
+    <input type="text" name="name" value="{{ thread.name }}" /><br />
+    <label for="description">Description</label><br />
+    <input type="text" name="description" value="{{ thread.description }}" /><br />
+    <label for="sticky">Important?</label>
+    <input type="checkbox" name="sticky" value="sticky" {% if thread.sticky %}checked="checked" {% endif %}/><br />
+    <label for="archive">Archiver?</label>
+    <input type="checkbox" name="archive" value="archive" {% if thread.archived %}checked="checked" {% endif %}/><br />
+    <br /><input type="submit" value="Valider" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

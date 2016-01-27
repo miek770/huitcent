@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var name = document.forms["group"]["Name"].value;
+    if (name == null || name == "")
+    {
+     alert("Vous devez entrer un nom de groupe.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">{{ group.name }}</div>
+  <div class="menu_items">
+
+   <a href="/passwords/{{ group.id }}/">Retour</a><br /><br />
+
+   <form name="group" action="/passwords/{{ group.id }}/save/" method="post" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="name">Nom</label><br />
+    <input type="text" name="Name" maxlength="50" size="40" value="{{ group.name }}" /><br />
+    <label for="name">Détails</label><br />
+    <input type="text" name="Details" maxlength="100" size="40" value="{{ group.details }}"><br />
+    <br /><input type="submit" value="Valider" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

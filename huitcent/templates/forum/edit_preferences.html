@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var ppp = document.forms["prefs"]["posts_per_page"].value;
+    var tpp = document.forms["prefs"]["threads_per_page"].value;
+    if (ppp == null || ppp == "" || isNaN(ppp))
+    {
+     alert("Le nombre de messages par page est invalide.");
+     return false;
+    }
+    else if (tpp == null || tpp == "" || isNaN(tpp))
+    {
+     alert("Le nombre de discussions par page est invalide.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Préférences</div>
+  <div class="menu_items">
+   <form name="prefs" action="/forum/do_edit_preferences/" method="post" enctype="multipart/form-data" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="posts_per_page">Messages par page</label><br />
+    <input type="text" name="posts_per_page" value="{{ preferences.posts_per_page }}") /><br />
+    <label for="threads_per_page">Discussions par page</label><br />
+    <input type="text" name="threads_per_page" value="{{ preferences.threads_per_page }}") /><br />
+    <label for="avatar">Avatar (laissez vide pour conserver votre avatar actuel, le nom de fichier de doit contenir que des caractères ASCII)</label><br />
+    <input type="file" name="avatar" size="20" maxlength="100" /><br />
+    <input type="submit" value="Valider" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

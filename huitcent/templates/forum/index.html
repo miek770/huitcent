@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+<script type="text/javascript">
+function clear_new_post(new_post)
+{
+    Dajaxice.forum.clear_new_post(Dajax.process, {'new_post': new_post});
+    return true;
+}
+</script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Nouveaux messages</div>
+   <div class="menu_items">
+    <span id="new_posts_summary">
+     {% if new_posts == 0 %}
+      Il n'y a aucun nouveau message.
+     {% endif %}
+     {% if new_posts == 1 %}
+      Il y a 1 nouveau message dans 1 discussion :<br />
+     {% endif %}
+     {% if new_posts > 1 %}
+      {% if new_threads == 1 %}
+       Il y a {{ new_posts }} nouveaux messages dans 1 discussion :<br />
+      {% else %}
+       Il y a {{ new_posts }} nouveaux messages dans {{ new_threads }} discussions :<br />
+      {% endif %}
+     {% endif %}
+    </span>
+    {% for new_post in new_post_list %}
+     <span id="new_post{{ new_post.5.id }}">
+      <br />{% comment %}
+      <img src="{% static "forum/flush.gif" %}" onclick="clear_new_post({{ new_post.5.id }})" />
+      <br /><a href="/forum/{{ new_post.5.id }}/clear_new_post/"><img class="borderless" src="{% static "forum/x.png" %}" alt="X" /></a>
+      <a href="/forum/{{ new_post.4.id }}/{{ new_post.3.id }}/{{ new_post.2.id }}/#last"><img class="borderless" src="{% static "forum/last_post.gif" %}" alt="Last post:" /></a>
+      {% endcomment %}
+      <a href="/forum/{{ new_post.4.id }}/">{{ new_post.4.name }}</a>
+      > <a href="/forum/{{ new_post.4.id }}/{{ new_post.3.id }}/">{{ new_post.3.name }}</a>
+      > <a href="/forum/{{ new_post.4.id }}/{{ new_post.3.id }}/{{ new_post.2.id }}/#last">{{ new_post.2.name }}</a><br />
+      <div class="menu_items_black">
+       <i>Par <b>{{ new_post.1.username }}</b> le {{ new_post.0.date }} :</i><br />
+       {{ new_post.0.get_summary }}
+      </div>
+     </span>
+    {% endfor %}
+   </div>
+  </div>
+ </div>
+{% endblock %}

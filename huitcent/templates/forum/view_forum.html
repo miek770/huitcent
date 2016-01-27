@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+ <script type="text/javascript">
+     <!--
+
+function confirm_del(topic_id) {
+    var answer = confirm("Voulez-vous vraiment effacer ce sujet de discussion?");
+    if (answer) {
+        window.location = "/forum/{{ forum.id }}/" + topic_id + "/do_delete/";
+    }
+}
+
+//-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+
+  <div class="menu_head">{{ forum.name }}</div><br />
+
+  <div class="menu_items_dark">
+   {% for category in category_list %}
+    <table id='topic'>
+     <th class="topich" colspan="3">{{ category.name }}</th>
+     {% for topic in topic_list %}
+      {% if topic.0.category == category %}
+       <tr>
+        <td class="topic0">
+         <a href="/forum/{{ forum.id }}/{{ topic.0.id }}/">
+          <img class="borderless" src="{% static "forum/folder.png" %}" alt="topic" />
+         </a>
+        </td>
+        <td class="topic1">
+         <b>
+          <a href="/forum/{{ forum.id }}/{{ topic.0.id }}/">{{ topic.0.name }}</a>
+         </b>
+         ({{ topic.0.get_posts }} messages dans {{ topic.0.get_threads }} discussions)
+         {% if right.admin %}
+           <a href="/forum/{{ forum.id }}/{{ topic.0.id }}/edit/"><img src="{% static "forum/preferences-system.png" %}" alt="Edit" /></a>
+           <a href="javascript:confirm_del({{ topic.0.id }})"><img src="{% static "forum/process-stop.png" %}" alt="Delete" /></a>
+         {% endif %}
+         <br />{{ topic.0.description }}
+        </td>
+        <td class="topic2">
+         {% if topic.1 %}
+          <a href="/forum/{{ forum.id }}/{{ topic.0.id }}/{{ topic.1.id }}/#last"><img class="borderless" src="{% static "forum/last_post.gif" %}" alt="Last post:" /></a>
+          <small>{{ topic.1.date }}</small><br />
+          Par : {{ topic.2 }}<br />
+          Dans :
+          <a href="/forum/{{ forum.id }}/{{ topic.0.id }}/{{topic.1.id }}/">
+           {{ topic.1.name }}
+          </a>
+         {% endif %}
+        </td>
+       </tr>
+      {% endif %}
+     {% endfor %}
+    </table>
+   {% endfor %}
+  </div><br />
+
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+  </div>
+ </div>
+{% endblock %}

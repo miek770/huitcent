@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var name = document.forms["group"]["Name"].value;
+    if (name == null || name == "")
+    {
+     alert("Vous devez entrer un nom de groupe.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Nouveau groupe</div>
+  <div class="menu_items">
+   <a href="/finance/">Retour</a><br /><br />
+   <form name="group" action="/finance/create/" method="post" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="name">Nom</label><br />
+    <input type="text" name="Name" maxlength="50" size="20" /><br />
+    <br /><input type="submit" value="Créer" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

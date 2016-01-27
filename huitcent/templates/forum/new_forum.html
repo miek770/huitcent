@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var name = document.forms["form"]["name"].value;
+    if (name == null || name == "")
+    {
+     alert("Vous devez entrer un nom de forum.");
+     return false;
+    }
+    return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Nouveau forum</div>
+  <div class="menu_items">
+   <form name="forum" action="/forum/create/" method="post" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="name">Nom</label><br />
+    <input type="text" name="name" maxlength="40" size="40" /><br />
+    <br /><input type="submit" value="Créer" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

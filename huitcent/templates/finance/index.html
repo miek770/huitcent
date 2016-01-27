@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Finance</div>
+  <div class="menu_items">
+   <a href="/finance/new/">Nouveau</a>
+   {% if groups %}
+    <br /><br />
+    {% for group in groups %}
+     {% if group.2 %}
+      <a href="/finance/{{ group.0.id }}/">{{ group.0.name }}</a>
+     {% else %}
+      {{ group.0.name }}
+     {% endif %}
+     <br />
+    {% endfor %}
+   {% endif %}
+  </div>
+ </div>
+{% endblock %}

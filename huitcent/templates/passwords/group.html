@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+<!--
+
+function confirm_del(group_id) {
+    var answer = confirm("Voulez-vous vraiment effacer ce groupe?");
+    if (answer) {
+        window.location = "/passwords/" + group_id + "/do_delete/";
+    }
+}
+
+-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">{{ group.name }}</div>
+  <div class="menu_items">
+
+   <a href="/passwords/">Retour</a>
+   | <a href="/passwords/{{ group.id }}/edit/">Modifier le groupe</a>
+   | <a href="javascript:confirm_del({{ group.id }})">Effacer le groupe</a>
+   | <a href="/passwords/{{ group.id }}/new/">Nouveau mot de passe</a><br /><br />
+
+   {% if password_list %}
+    {% for password in password_list %}
+     <a href="/passwords/{{ group.id }}/{{ password.id }}/">{{ password.name }}</a><br />
+    {% endfor %}
+   {% else %}
+    Il n'y a aucun mot de passe.<br />
+   {% endif %}
+
+  </div>
+ </div>
+{% endblock %}

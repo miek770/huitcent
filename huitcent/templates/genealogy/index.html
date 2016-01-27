@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Généalogie</div>
+  <div class="menu_items">
+   {% for tree in tree_list %}
+    {% if tree.1 %}
+     <a href="{{ tree.0.id }}/">Arbre de {{ tree.0.user.username }}</a>
+    {% else %}
+     Arbre de {{ tree.0.user.username }}
+    {% endif %}<br />
+   {% endfor %}
+  </div>
+ </div>
+{% endblock %}

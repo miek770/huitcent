@@ -1,0 +1,100 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="robots" content="noindex">
+  <meta name="google-site-verification" content="SzLSqGuYsdOZxeXqKYV78Ck414jTwPvGpUdVhfLGYGg" />
+  <title>Huitcent - {% now "j F Y H:i" %} - Bienvenue {{ user.username }}</title>
+
+  <link rel="stylesheet" type="text/css" href="{% static "forum/base.css" %}" />
+  <link rel="apple-touch-icon" href="{% static "forum/iphone-icon.png" %}" />
+
+  {% block javascript %}{% endblock %}
+
+ </head>
+ <body>
+  <div id="container">
+   <div id="container-head"><a href="/forum">Huitcent</a> - {% now "j F Y H:i" %} - Bienvenue {{ user.username }} - <a href="/logout/">Déconnexion</a></div>
+   <div id="container-left">
+
+    <div class="menu">
+     <div class="menu_head">
+      Forums
+     </div>
+     <div class="menu_items">
+      <a href="/forum/new">+</a><br />
+      {% for forum in forum_list %}
+       {% if forum.1 %}
+        <a href="/forum/{{ forum.0.id }}">{{ forum.0.name }}</a>
+       {% else %}
+       {{ forum.0.name }} [<a href="/forum/{{ forum.0.id }}/subscribe">+</a>]
+       {% endif %}
+       <br />
+      {% empty %}
+       Il n'y a aucun forum.
+      {% endfor %}
+     </div>
+    </div>
+
+    <div class="menu">
+     <div class="menu_head">
+      Applications
+     </div>
+     <div class="menu_items">
+      <a href="/finance/">Finance</a><br />
+      <a href="/passwords/">Mots de passe</a>
+     </div>
+    </div>
+
+    <div class="menu">
+     <div class="menu_head">
+      Compte
+     </div>
+     <div class="menu_items">
+      <a href="/forum/edit_preferences/">Préférences</a>
+     </div>
+    </div>
+ 
+    {% if user.is_staff %}
+     <div class="menu" id="admin_menu">
+      <div class="menu_head">
+       Administration
+      </div>
+      <div class="menu_items" id="admin_list">
+       <a href="/admin">Administration</a>
+       {% if pending %}<br />- Abonnements : <a href="/admin/forum/right/?pending__exact=1">{{ pending }}</a>{% endif %}
+       {% if hidden %}<br />- À archiver : <a href="/admin/forum/thread/?archived__exact=1">{{ hidden }}</a>{% endif %}
+      </div>
+     </div>
+    {% endif %}
+
+    <div class="menu">
+     <div class="menu_head">
+      Statistiques
+     </div>
+     <div class="menu_items">
+      Utilisateurs : {{ user_count }}<br />
+      Forums : {{ forum_count }}<br />
+      Sujets : {{ topic_count }}<br />
+      Discussions : {{ thread_count }}<br />
+      Messages : {{ post_count }}<br />
+      Contribution : {{ contribution }}%
+     </div>
+    </div>
+
+   </div>
+   <div id="container-right">
+    {% if message %}<script>alert("{{ message }}")</script>{% endif %}
+    {% block content %}{% endblock %}
+   </div>
+  </div>
+  {% if user.username = "Mike" or user.username = "Chantale" %}
+   <script>toggle_todo();</script>
+  {% endif %}
+  {% if user.is_staff %}
+   <script>toggle_admin();</script>
+  {% endif %}
+  {% block footer %}{% endblock %}
+ </body>
+</html>

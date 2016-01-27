@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="menu">
+    <div class="menu_head">Arbre généalogique de {{ tree.user.username }}</div>
+    <div class="menu_items">
+      <a href="/genealogy/">Retour</a><br /><br />
+      Générations à afficher :
+      <form name="gens" action="/genealogy/{{ tree.id }}/" method="get">
+        <select name="gen" onchange="this.form.submit()">
+          <option value="3"{% if gens == 3 %} selected{% endif %}>3</option>
+          <option value="4"{% if gens == 4 %} selected{% endif %}>4</option>
+          <option value="5"{% if gens == 5 %} selected{% endif %}>5</option>
+          <option value="6"{% if gens == 6 %} selected{% endif %}>6</option>
+          <option value="7"{% if gens == 7 %} selected{% endif %}>7</option>
+          <option value="8"{% if gens == 8 %} selected{% endif %}>8</option>
+          <option value="9"{% if gens == 9 %} selected{% endif %}>9</option>
+          <option value="10"{% if gens == 10 %} selected{% endif %}>10</option>
+        </select>
+      </form>
+      Modifier un individu :
+      <form name="persons" action="/genealogy/{{ tree.id }}/person/?gen={{ gens }}" method="post">
+        {% csrf_token %}
+        <select name="person" onchange="this.form.submit()">
+          {% for person in persons_list %}
+            <option value="{{ person.id }}">{{ person }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      <a href="/genealogy/{{ tree.id }}/print/?gen=4">Version imprimable</a><br />
+      <br /><br />
+      {% for line in content %}
+        {{ line|safe }}
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

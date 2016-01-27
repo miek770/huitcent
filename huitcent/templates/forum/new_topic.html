@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var name = document.forms["topic"]["name"].value;
+    if (name == null || name == "")
+    {
+     alert("Vous devez entrer un nom de sujet de discussion.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > Nouveau sujet
+  </div><br />
+  <div class="menu_items">
+   <form name="topic" action="/forum/{{ forum.id }}/create_topic/" method="post" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="name">Nom</label><br />
+    <input type="text" name="name" maxlength="40" size="40" /><br />
+
+    <label for="description">Description</label><br />
+    <input type="text" name="description" maxlength="100" size="60" /><br />
+
+    <label for="category">Catégorie</label><br />
+    <select name="category">
+     {% for category in category_list %}
+      <option value="{{ category.id }}">{{ category.name }}</option>
+     {% endfor %}
+    </select><br />
+    <br /><input type="submit" value="Créer" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

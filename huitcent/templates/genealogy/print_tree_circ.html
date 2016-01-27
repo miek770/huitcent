@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="google-site-verification" content="SzLSqGuYsdOZxeXqKYV78Ck414jTwPvGpUdVhfLGYGg" />
+</head>
+<body>
+
+<canvas id="tree">
+    Votre fureteur ne supporte pas HTML5.
+</canvas>
+
+<script type="text/javascript">
+    var canvas = document.getElementById("tree");
+    var ctx = canvas.getContext("2d");
+    var gen = 8;
+    var len = 80;
+    
+    canvas.width = (gen-1)*2*len+len;
+    canvas.height = (gen-1)*len + len/2;
+    
+    var arc_c = [gen*len-len/2, (gen-1)*len + len/2];
+    
+    // First circle (root)
+    //ctx.moveTo((gen-1)*len, gen*len);
+    ctx.beginPath();
+    ctx.arc(arc_c[0], arc_c[1], len/2, Math.PI, 0);
+    ctx.moveTo(0, arc_c[1]);
+    ctx.lineTo((gen-1)*2*len+len, arc_c[1]);
+    ctx.stroke();
+    
+    if (gen>1) {
+        // Second circle (root's parents)
+        //ctx.moveTo((gen-2)*len, gen*len);
+        ctx.beginPath();
+        ctx.arc(arc_c[0], arc_c[1], 1.5*len, Math.PI, 0);
+        ctx.moveTo(arc_c[0], (gen-1)*len);
+        ctx.lineTo(arc_c[0], 0);
+        ctx.stroke();
+    }
+    
+    if (gen>2) {
+        // Third circle (root's grandparents)
+        ctx.beginPath();
+        ctx.arc(arc_c[0], arc_c[1], 2.5*len, Math.PI, 0);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 1.5*len*Math.cos(Math.PI/4);
+        start[1] = arc_c[1] - 1.5*len*Math.sin(Math.PI/4);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(Math.PI/4);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/4);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 1.5*len*Math.cos(Math.PI/4);
+        start[1] = arc_c[1] - 1.5*len*Math.sin(Math.PI/4);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(Math.PI/4);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/4);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    }
+
+    if (gen>3) {
+        // Fourth circle (root's great-grandparents)
+        ctx.beginPath();
+        ctx.arc(arc_c[0], arc_c[1], 3.5*len, Math.PI, 0);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 2.5*len*Math.cos(Math.PI/8);
+        start[1] = arc_c[1] - 2.5*len*Math.sin(Math.PI/8);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(Math.PI/8);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/8);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 2.5*len*Math.cos(Math.PI/8);
+        start[1] = arc_c[1] - 2.5*len*Math.sin(Math.PI/8);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(Math.PI/8);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/8);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 2.5*len*Math.cos(3*Math.PI/8);
+        start[1] = arc_c[1] - 2.5*len*Math.sin(3*Math.PI/8);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(3*Math.PI/8);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/8);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 2.5*len*Math.cos(3*Math.PI/8);
+        start[1] = arc_c[1] - 2.5*len*Math.sin(3*Math.PI/8);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(3*Math.PI/8);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/8);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    }
+
+    if (gen>4) {
+        // Fifth circle (root's great-great-grandparents)
+        ctx.beginPath();
+        ctx.arc(arc_c[0], arc_c[1], 4.5*len, Math.PI, 0);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 3.5*len*Math.cos(Math.PI/16);
+        start[1] = arc_c[1] - 3.5*len*Math.sin(Math.PI/16);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(Math.PI/16);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/16);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 3.5*len*Math.cos(Math.PI/16);
+        start[1] = arc_c[1] - 3.5*len*Math.sin(Math.PI/16);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(Math.PI/16);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/16);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 3.5*len*Math.cos(3*Math.PI/16);
+        start[1] = arc_c[1] - 3.5*len*Math.sin(3*Math.PI/16);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(3*Math.PI/16);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/16);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 3.5*len*Math.cos(3*Math.PI/16);
+        start[1] = arc_c[1] - 3.5*len*Math.sin(3*Math.PI/16);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(3*Math.PI/16);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/16);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 3.5*len*Math.cos(5*Math.PI/16);
+        start[1] = arc_c[1] - 3.5*len*Math.sin(5*Math.PI/16);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(5*Math.PI/16);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(5*Math.PI/16);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 3.5*len*Math.cos(5*Math.PI/16);
+        start[1] = arc_c[1] - 3.5*len*Math.sin(5*Math.PI/16);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(5*Math.PI/16);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(5*Math.PI/16);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 3.5*len*Math.cos(7*Math.PI/16);
+        start[1] = arc_c[1] - 3.5*len*Math.sin(7*Math.PI/16);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(7*Math.PI/16);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(7*Math.PI/16);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 3.5*len*Math.cos(7*Math.PI/16);
+        start[1] = arc_c[1] - 3.5*len*Math.sin(7*Math.PI/16);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(7*Math.PI/16);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(7*Math.PI/16);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    }
+
+    if (gen>5) {
+        // Sixth circle (root's great-great-great-grandparents)
+        ctx.beginPath();
+        ctx.arc(arc_c[0], arc_c[1], 5.5*len, Math.PI, 0);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 4.5*len*Math.cos(Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 4.5*len*Math.cos(Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 4.5*len*Math.cos(3*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(3*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(3*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 4.5*len*Math.cos(3*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(3*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(3*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 4.5*len*Math.cos(5*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(5*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(5*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(5*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 4.5*len*Math.cos(5*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(5*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(5*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(5*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 4.5*len*Math.cos(7*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(7*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(7*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(7*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 4.5*len*Math.cos(7*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(7*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(7*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(7*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 4.5*len*Math.cos(9*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(9*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(9*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(9*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 4.5*len*Math.cos(9*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(9*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(9*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(9*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 4.5*len*Math.cos(11*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(11*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(11*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(11*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 4.5*len*Math.cos(11*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(11*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(11*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(11*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 4.5*len*Math.cos(13*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(13*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(13*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(13*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 4.5*len*Math.cos(13*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(13*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(13*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(13*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 4.5*len*Math.cos(15*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(15*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(15*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(15*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 4.5*len*Math.cos(15*Math.PI/32);
+        start[1] = arc_c[1] - 4.5*len*Math.sin(15*Math.PI/32);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(15*Math.PI/32);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(15*Math.PI/32);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    }
+
+    if (gen>6) {
+        // Seventh circle (root's great-great-great-grandparents)
+        ctx.beginPath();
+        ctx.arc(arc_c[0], arc_c[1], 6.5*len, Math.PI, 0);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(3*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(3*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(3*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(3*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(3*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(3*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(5*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(5*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(5*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(5*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(5*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(5*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(5*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(5*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(7*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(7*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(7*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(7*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(7*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(7*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(7*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(7*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(9*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(9*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(9*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(9*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(9*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(9*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(9*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(9*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(11*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(11*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(11*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(11*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(11*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(11*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(11*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(11*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(13*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(13*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(13*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(13*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(13*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(13*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(13*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(13*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(15*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(15*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(15*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(15*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(15*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(15*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(15*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(15*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(17*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(17*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(17*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(17*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(17*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(17*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(17*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(17*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(19*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(19*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(19*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(19*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(19*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(19*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(19*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(19*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(21*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(21*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(21*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(21*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(21*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(21*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(21*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(21*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(23*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(23*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(23*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(23*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(23*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(23*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(23*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(23*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(25*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(25*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(25*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(25*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(25*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(25*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(25*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(25*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(27*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(27*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(27*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(27*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(27*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(27*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(27*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(27*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(29*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(29*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(29*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(29*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(29*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(29*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(29*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(29*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 5.5*len*Math.cos(31*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(31*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(31*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(31*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 5.5*len*Math.cos(31*Math.PI/64);
+        start[1] = arc_c[1] - 5.5*len*Math.sin(31*Math.PI/64);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(31*Math.PI/64);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(31*Math.PI/64);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    }
+
+    if (gen>7) {
+        // Eight circle (root's great-great-great-grandparents)
+        ctx.beginPath();
+        ctx.arc(arc_c[0], arc_c[1], 7.5*len, Math.PI, 0);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(3*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(3*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(3*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(3*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(3*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(3*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(3*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(5*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(5*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(5*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(5*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(5*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(5*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(5*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(5*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(7*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(7*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(7*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(7*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(7*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(7*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(7*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(7*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(9*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(9*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(9*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(9*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(9*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(9*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(9*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(9*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(11*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(11*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(11*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(11*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(11*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(11*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(11*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(11*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(13*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(13*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(13*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(13*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(13*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(13*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(13*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(13*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(15*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(15*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(15*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(15*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(15*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(15*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(15*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(15*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(17*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(17*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(17*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(17*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(17*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(17*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(17*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(17*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(19*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(19*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(19*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(19*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(19*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(19*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(19*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(19*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(21*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(21*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(21*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(21*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(21*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(21*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(21*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(21*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(23*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(23*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(23*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(23*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(23*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(23*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(23*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(23*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(25*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(25*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(25*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(25*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(25*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(25*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(25*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(25*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(27*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(27*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(27*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(27*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(27*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(27*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(27*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(27*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(29*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(29*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(29*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(29*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(29*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(29*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(29*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(29*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(31*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(31*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(31*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(31*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(31*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(31*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(31*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(31*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(33*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(33*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(33*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(33*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(33*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(33*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(33*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(33*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(35*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(35*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(35*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(35*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(35*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(35*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(35*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(35*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(37*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(37*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(37*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(37*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(37*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(37*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(37*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(37*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(39*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(39*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(39*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(39*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(39*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(39*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(39*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(39*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(41*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(41*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(41*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(41*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(41*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(41*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(41*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(41*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(43*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(43*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(43*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(43*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(43*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(43*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(43*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(43*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(45*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(45*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(45*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(45*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(45*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(45*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(45*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(45*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(47*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(47*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(47*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(47*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(47*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(47*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(47*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(47*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(49*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(49*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(49*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(49*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(49*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(49*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(49*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(49*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(51*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(51*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(51*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(51*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(51*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(51*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(51*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(51*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(53*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(53*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(53*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(53*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(53*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(53*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(53*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(53*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(55*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(55*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(55*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(55*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(55*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(55*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(55*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(55*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(57*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(57*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(57*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(57*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(57*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(57*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(57*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(57*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(59*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(59*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(59*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(59*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(59*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(59*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(59*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(59*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(61*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(61*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(61*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(61*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(61*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(61*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(61*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(61*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] - 6.5*len*Math.cos(63*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(63*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] - len*(gen-0.5)*Math.cos(63*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(63*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        var start = [];
+        start[0] = arc_c[0] + 6.5*len*Math.cos(63*Math.PI/128);
+        start[1] = arc_c[1] - 6.5*len*Math.sin(63*Math.PI/128);
+        ctx.moveTo(start[0], start[1]);
+        var end = [];
+        end[0] = arc_c[0] + len*(gen-0.5)*Math.cos(63*Math.PI/128);
+        end[1] = arc_c[1] - len*(gen-0.5)*Math.sin(63*Math.PI/128);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    }
+
+</script>
+
+</body>
+</html>

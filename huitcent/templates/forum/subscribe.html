@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Abonnement au forum "{{ forum.name }}"</div>
+  <div class="menu_items">
+   Voulez-vous vraiment demander un abonnement au forum suivant : {{ forum.name }}?<br /><br />
+   <a href="/forum/{{ forum.id }}/do_subscribe">Valider</a>
+  </div>
+ </div>
+{% endblock %}

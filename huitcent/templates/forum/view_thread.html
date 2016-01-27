@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+<!--
+
+function validate_form() {
+    var message = document.forms["reply"]["message"].value;
+    if (message == null || message == "") {
+        alert("Vous devez entrer un message.");
+        return false;
+    }
+    else return true;
+}
+
+function confirm_del(post_id) {
+    var answer = confirm("Voulez-vous vraiment effacer ce message?");
+    if (answer) {
+        window.location = "/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/" + post_id + "/do_delete/";
+    }
+}
+
+//-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/new_thread/">Nouvelle discussion</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/new_post/">Nouveau message</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > <a href="/forum/{{ forum.id }}/{{ topic.id }}/">{{ topic.name }}</a>
+   > {{ thread.name }}
+  </div><br />
+
+  <div class="menu_head"><center>
+   <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/?page=1">Première</a> |
+   {% for n in page_list %}
+    {% if n != page %}
+     <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/?page={{ n }}">{{ n }}</a> |
+    {% else %}
+     {{ n }} |
+    {% endif %}
+   {% endfor %}
+   <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/">Dernière</a>
+  </center></div><br />
+
+  <div class="menu_items_paddless">
+   <table id="post">
+
+    {% for post in post_list %}
+     <tr>
+      <td class="post0">
+       {% if post.4 %}
+         <a name="last"><small>{{ post.0.date }}</small></a>
+       {% else %}
+         <small>{{ post.0.date }}</small>
+       {% endif %}
+       <br /><b>{{ post.0.user }}</b>
+       <br />Posts: {{ post.0.get_user_posts }}
+       {% if post.2 %}
+        <br /><img src="/media/{{ post.2.name }}" alt="{{ post.0.user }}" height="100px" width="100px" />
+       {% endif %}
+      </td>
+      <td class="post1">
+       <div class="post_tools">
+        {% if post.3 %}Nouveau!{% endif %}
+        <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/{{ post.0.id }}/reply/">Répondre</a>
+        {% if user == post.0.user or right.admin %}
+         | <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/{{ post.0.id }}/edit/">Modifier</a>
+         | <a href="javascript:confirm_del({{ post.0.id }})">Effacer</a>
+        {% endif %}
+        | <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/{{ post.0.id }}/unread/">Marquer non-lu</a>
+       </div>
+       {{ post.0.message|safe }}
+       {% if post.1 %}
+        <hr />Attachement: <a href="/media/{{ post.1.name }}">{{ post.1.name }}</a>
+        {% if 'jpg' in post.1.name or 'gif' in post.1.name or 'png' in post.1.name or 'JPG' in post.1.name or 'GIF' in post.1.name or 'PNG' in post.1.name or 'jpeg' in post.1.name %}
+         <br /><br /><img src="/media/{{ post.1.name }}" alt="{{ post.1.name }}" />
+        {% endif %}
+       {% endif %}
+      </td>
+     </tr>
+
+    {% endfor %}
+   </table>
+  </div><a name="end"><br /></a>
+
+  <div class="menu_head"><center>
+   <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/?page=1">Première</a> |
+   {% for n in page_list %}
+    {% if n != page %}
+     <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/?page={{ n }}">{{ n }}</a> |
+    {% else %}
+     {{ n }} |
+    {% endif %}
+   {% endfor %}
+   <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/">Dernière</a>
+  </center></div><br />
+
+  <div class="menu_items">
+   <form name="reply" action="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/create_post/" method="post" enctype="multipart/form-data" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="message">Message</label><br />
+    <textarea name='message' cols='80' rows='5' value=''></textarea><br />
+    <label for="file">Attachement</label><br />
+    <input type="file" name="file" size="40" maxlength="100" /><br />
+    <input type="submit" value="Répondre" />
+   </form>
+   <small><br />Pour insérer un lien : &lt;a href="<i>hyperlien</i>"&gt;<i>hyperlien</i>&lt;/a&gt;
+   <br />Pour insérer une image : &lt;img src="<i>adresseimage</i>" alt="<i>adresseimage</i>" /&gt;</small>
+  </div><br />
+
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > <a href="/forum/{{ forum.id }}/{{ topic.id }}/">{{ topic.name }}</a>
+   > {{ thread.name }}
+  </div><br />
+
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/new_thread/">Nouvelle discussion</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/new_post/">Nouveau message</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div>
+ </div>
+{% endblock %}

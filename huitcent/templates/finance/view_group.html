@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+<script type="text/javascript">
+<!--
+
+function validate_form() {
+    var name = document.forms["transaction"]["name"].value;
+    var price = document.forms["transaction"]["price"].value;
+    if (name == null || name == "") {
+        alert("Vous devez entrer un nom de transaction.");
+        return false;
+    }
+    else if (isNaN(price) || price == null || price == "") {
+        alert("Le montant de la transaction est invalide.");
+        return false;
+    }
+    else return true;
+}
+
+function confirm_del(transaction) {
+    var answer = confirm("Voulez-vous vraiment effacer cette transaction?");
+    if (answer) window.location = "/finance/{{ group.id }}/" + transaction + "/delete_transaction/";
+}
+//-->
+</script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">{{ group.name }}</div>
+  <div class="menu_items">
+   <a href="/finance/">Retour</a><br /><br />
+
+   <center>
+    {% for debt in debts %}
+     {{ debt.0.username }}:
+     <span id="debt{{ debt.0.id }}"><br /><b><img src="{% static "loading_small.gif" %}" alt="Calcul en cours..." /></b><br /><br /></span>
+    {% endfor %}
+   </center><br />
+
+   <center><h3>Ajouter une nouvelle transaction</h3><table>
+    <tr>
+     <th class='transactions' rowspan='2'>Nom</th>
+     <th class='transactions' rowspan='2'>Description</th>
+     <th class='transactions' rowspan='2'>Prix</th>
+     <th class='transactions' colspan='{{ debtors_span }}'>Débiteurs [<a href="/finance/{{ group.id }}/add_member/">+</a>]</th>
+     <th class='transactions' rowspan='2'>Action</th>
+    </tr>
+
+    <tr>
+    {% for member in members %}
+     <th class='transactions'>{{ member.username }}</th>
+    {% endfor %}
+    </tr>
+
+    <tr>
+     <form name="transaction" action="/finance/{{ group.id }}/add_transaction/" method="post" onsubmit="return validate_form()">
+      {% csrf_token %}
+      <td class='transactions'><input type="text" name="name" maxlength="40" /></td>
+      <td class='transactions'><input type="text" name="description" maxlength="100" /></td>
+      <td class='transactions' align='right'><input type="text" name="price" size="10" maxlength="10" /></td>
+      {% for member in members %}
+       <td class='transactions' align='center'><input type="checkbox" name="chk_{{ member.username }}"</td>
+      {% endfor %}
+      <td class='transactions'><input type="submit" value="Créer" /></td>
+     </form>
+    </tr>
+
+    </table></center><br />
+
+    <center><h3>Transactions récentes</h3><table id="transactions">
+    <tr>
+     <th class='transactions' rowspan='2'>Créditeur</th>
+     <th class='transactions' rowspan='2'>Nom</th>
+     <th class='transactions' rowspan='2'>Description</th>
+     <th class='transactions' rowspan='2'>Date</th>
+     <th class='transactions' rowspan='2'>Prix</th>
+     <th class='transactions' colspan='{{ debtors_span }}'>Débiteurs [<a href="/finance/{{ group.id }}/add_member/">+</a>]</th>
+     <th class='transactions' rowspan='2'>Action</th>
+    </tr>
+
+    <tr>
+    {% for member in members %}
+     <th class='transactions'>{{ member.username }}</th>
+    {% endfor %}
+    </tr>
+    {% for transaction in transactions %}
+     <tr>
+      <td class='transaction' align='left'>{{ transaction.0.user.username }}</td>
+      <td class='transaction' align='left'>{{ transaction.0.name }}</td>
+      <td class='transaction' align='left'>{{ transaction.0.description }}</td>
+      <td class='transaction' align='right'>{{ transaction.0.date }}</td>
+      <td class='transaction' align='right'>{{ transaction.0.price }}</td>
+      {% for debt in transaction.1 %}
+      <td class='transaction' align='right'>{{ debt }} $</a>
+      {% endfor %}
+      <td class='transactions' align='center'>
+      {% if transaction.2 %}
+      <input type='button' onclick='confirm_del({{ transaction.0.id }})' value='Effacer' />
+      {% endif %}
+      </td>
+     </tr>
+    {% endfor %}
+   </table></center><br />
+  </div>
+ </div>
+{% endblock %}
+
+{% block footer %}
+ <script type="text/javascript">
+<!--
+
+{% for transaction in transactions %}{% if transaction < 20 %}get_transaction("{{ group.id }}", "{{ transaction }}");{% endif %}{% endfor %}
+{% for debt in debts %}get_debt("{{ user.id }}", "{{ debt.0.id }}", "{{ group.id }}");{% endfor %}
+
+//-->
+ </script>
+{% endblock %}

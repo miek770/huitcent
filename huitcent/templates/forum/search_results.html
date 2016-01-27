@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > Résultats
+   {% if threads < 2 %}({{ threads }} discussion,{% endif %}
+   {% if threads > 1 %}({{ threads }} discussions,{% endif %}
+   {% if posts < 2 %}{{ posts }} message){% endif %}
+   {% if posts > 1 %}{{ posts }} messages){% endif %}
+  </div>
+  {% if threads %}
+   <h2>Discussions</h2>
+   <div class="quote">
+    {% for thread in thread_list %}
+     <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+     > <a href="/forum/{{ forum.id }}/{{ thread.1.id }}/">{{ thread.1.name }}</a>
+     > <a href="/forum/{{ forum.id }}/{{ thread.1.id }}/{{ thread.0.id }}/?page=1">{{ thread.0.name }}</a><br />
+    {% endfor %}
+   </div>
+  {% endif %}
+  {% if posts %}
+   <h2>Messages</h2>
+   {% for post in post_list %}
+    <div class="quote">
+     <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+     > <a href="/forum/{{ forum.id }}/{{ post.2.id }}/">{{ post.2.name }}</a>
+     > <a href="/forum/{{ forum.id }}/{{ post.2.id }}/{{ post.1.id }}/?page={{ post.3 }}">{{ post.1.name }}</a><hr />
+     <i>{{ post.0.user.username }} said on {{ post.0.date }}</i><br />
+     {{ post.0.get_summary }}
+    </div>
+   {% endfor %}
+  {% endif %}
+ </div>
+{% endblock %}

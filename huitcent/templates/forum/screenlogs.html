@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Sortie</div>
+   <div class="menu_items">
+    {% for log in output %}
+     <h3>{{ log.name }} - {{ log.date }}</h3>
+     {% for line in log.lines %}
+      {{ line }}<br />
+     {% endfor %}
+    {% endfor %}
+   </div>
+  </div>
+ </div>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+ <script type="text/javascript">
+<!--
+
+function confirm_del(thread_id) {
+    var answer = confirm("Voulez-vous vraiment effacer cette discussion?");
+    if (answer) {
+        window.location = "/forum/{{ forum.id }}/{{ topic.id }}/" + thread_id + "/do_delete/";
+    }
+}
+
+//-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/new_thread/">Nouvelle discussion</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > {{ topic.name }}
+  </div><br />
+
+  <div class="menu_head"><center>
+   <a href="/forum/{{ forum.id }}/{{ topic.id }}/?page=1">Première</a> |
+   {% for n in page_list %}
+    {% if n != page %}
+     <a href="/forum/{{ forum.id }}/{{ topic.id }}/?page={{ n }}">{{ n }}</a> |
+    {% else %}
+     {{ n }} |
+    {% endif %}
+   {% endfor %}
+   <a href="/forum/{{ forum.id }}/{{ topic.id }}/?page=0">Dernière</a>
+  </center></div><br />
+
+  <div class="menu_items_paddless">
+   {% for thread in thread_list %}
+    <table id='topic'>
+     <tr>
+      <td class="topic0">
+       <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/">
+        {% if thread.sticky %}
+         <img class="borderless" src="{% static "forum/emblem-important.png" %}" alt="thread" />
+        {% else %}
+         <img class="borderless" src="{% static "forum/text-x-generic.png" %}" alt="thread" />
+        {% endif %}
+       </a>
+      </td>
+      <td class="topic1">
+       <b>
+        <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/">{{ thread.name }}</a>
+       </b>
+       ({{ thread.get_posts }} messages)
+       {% if right.admin %}
+        <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/edit/"><img src="{% static "forum/preferences-system.png" %}" alt="Edit" /></a>
+        <a href="javascript:confirm_del({{ thread.id }})"><img src="{% static "forum/process-stop.png" %}" alt="Delete" /></a>
+        {% if thread.archived %}
+         <img src="{% static "forum/system-file-manager.png" %}" alt="Archive" />
+        {% endif %}
+       {% endif %}
+       <br />{{ thread.description }}
+      </td>
+      <td class="topic2">
+       <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/#last"><img class="borderless" src="{% static "forum/last_post.gif" %}" alt="Last post:" /></a>
+       <small>{{ thread.get_last_post.date }}</small><br />
+       Par : {{ thread.get_last_post.user }}
+      </td>
+     </tr>
+    </table>
+   {% endfor %}
+  </div><br />
+
+  <div class="menu_head"><center>
+   <a href="/forum/{{ forum.id }}/{{ topic.id }}/?page=1">Première</a> |
+   {% for n in page_list %}
+    {% if n != page %}
+     <a href="/forum/{{ forum.id }}/{{ topic.id }}/?page={{ n }}">{{ n }}</a> |
+    {% else %}
+     {{ n }} |
+    {% endif %}
+   {% endfor %}
+   <a href="/forum/{{ forum.id }}/{{ topic.id }}/?page=0">Dernière</a>
+  </center></div><br />
+
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > {{ topic.name }}
+  </div><br />
+
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/new_thread/">Nouvelle discussion</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div>
+ </div>
+{% endblock %}

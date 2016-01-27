@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var search = document.forms["search"]["search"].value;
+    if (search == null || search == "")
+    {
+     alert("Vous devez entrer une chaîne de caractères à rechercher.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > Recherche
+  </div><br />
+  <div class="menu_items">
+   <form name="search" action="/forum/{{ forum.id }}/do_search/" method="post" enctype="multipart/form-data" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="search">Recherche</label><br />
+    <input type="text" name="search" />
+    <input type="submit" value="Rechercher" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

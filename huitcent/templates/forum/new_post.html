@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var message = document.forms["post"]["message"].value;
+    if (message == null || message == "")
+    {
+     alert("Vous devez entrer un message.");
+     return false;
+    }
+    return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/new_thread/">Nouvelle discussion</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/new_post/">Nouveau message</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > <a href="/forum/{{ forum.id }}/{{ topic.id }}/">{{ topic.name }}</a>
+   > <a href="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/">{{ thread.name }}</a>
+   > Nouveau message
+  </div><br />
+  <div class="menu_items">
+   <form name="post" action="/forum/{{ forum.id }}/{{ topic.id }}/{{ thread.id }}/create_post/" method="post" enctype="multipart/form-data" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="message">Message</label><br />
+    <textarea name='message' cols='80' rows='5' value=''></textarea><br />
+    <label for="file">Attachement</label><br />
+    <input type="file" name="file" size="40" maxlength="100" /><br />
+    <input type="submit" value="Répondre" />
+   </form>
+   <small><br />Pour insérer un lien : &lt;a href="<i>hyperlien</i>"&gt;<i>hyperlien</i>&lt;/a&gt;
+   <br />Pour insérer une image : &lt;img src="<i>adresseimage</i>" alt="<i>adresseimage</i>" /&gt;</small>
+  </div>
+ </div>
+{% endblock %}

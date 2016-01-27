@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var name = document.forms["topic"]["name"].value;
+    if (name == null || name == "")
+    {
+     alert("Vous devez entrer un nom de sujet de discussion.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_bar">
+   <a href="/forum/">Huitcent</a>
+   | <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   | <a href="/forum/{{ forum.id }}/new_category/">Nouvelle catégorie</a>
+   | <a href="/forum/{{ forum.id }}/new_topic/">Nouveau sujet</a>
+   | <a href="/forum/{{ forum.id }}/{{ topic.id }}/new_thread/">Nouvelle discussion</a>
+   | <a href="/forum/{{ forum.id }}/search/">Recherche</a>
+  </div><br />
+  <div class="menu_head">
+   <a href="/forum/{{ forum.id }}/">{{ forum.name }}</a>
+   > <a href="/forum/{{ forum.id }}/{{ topic.id }}/">{{ topic.name }}</a>
+   > Modifier sujet
+  </div><br />
+  <div class="menu_items">
+   <form name="topic" action="/forum/{{ forum.id }}/{{ topic.id }}/do_edit/" method="post" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="name">Nom</label><br />
+    <input type="text" name="name" value="{{ topic.name }}" /><br />
+    <label for="description">Description</label><br />
+    <input type="text" name="description" value="{{ topic.description }}" />
+    <br /><input type="submit" value="Valider" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

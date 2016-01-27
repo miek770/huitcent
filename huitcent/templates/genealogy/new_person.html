@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   // Declaring valid date character, minimum year and maximum year
+   var dtCh= "/";
+   var minYear=1000;
+   var maxYear=2100;
+
+   function isInteger(s)
+   {
+    var i;
+    for (i = 0; i < s.length; i++)
+    {
+     var c = s.charAt(i);
+     if (((c < "0") || (c > "9"))) return false;
+    }
+    return true;
+   }
+
+   function stripCharsInBag(s, bag)
+   {
+    var i;
+    var returnString = "";
+    // Search through string's characters one by one.
+    // If character is not in bag, append to returnString.
+    for (i = 0; i < s.length; i++)
+    {
+     var c = s.charAt(i);
+     if (bag.indexOf(c) == -1) returnString += c;
+    }
+    return returnString;
+   }
+
+   function daysInFebruary(year)
+   {
+    // February has 29 days in any year evenly divisible by four,
+    // EXCEPT for centurial years which are not also divisible by 400.
+    return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+   }
+
+   function DaysArray(n)
+   {
+    for (var i = 1; i <= n; i++)
+    {
+     this[i] = 31;
+     if (i==4 || i==6 || i==9 || i==11) {this[i] = 30};
+     if (i==2) {this[i] = 29};
+    } 
+    return this;
+   }
+
+   function isDate(dtStr)
+   {
+    var daysInMonth = DaysArray(12);
+    var pos1=dtStr.indexOf(dtCh);
+    var pos2=dtStr.indexOf(dtCh,pos1+1);
+    var strDay=dtStr.substring(0,pos1);
+    var strMonth=dtStr.substring(pos1+1,pos2);
+    var strYear=dtStr.substring(pos2+1);
+    strYr=strYear;
+    if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1);
+    if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1);
+    for (var i = 1; i <= 3; i++)
+    {
+     if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1);
+    }
+    month=parseInt(strMonth);
+    day=parseInt(strDay);
+    year=parseInt(strYr);
+    if (pos1==-1 || pos2==-1)
+    {
+     //alert("The date format should be : mm/dd/yyyy");
+     return false;
+    }
+    if (strMonth.length<1 || month<1 || month>12)
+    {
+     //alert("Please enter a valid month");
+     return false;
+    }
+    if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month])
+    {
+     //alert("Please enter a valid day");
+     return false;
+    }
+    if (strYear.length != 4 || year==0 || year<minYear || year>maxYear)
+    {
+     //alert("Please enter a valid 4 digit year between "+minYear+" and "+maxYear);
+     return false;
+    }
+    if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false)
+    {
+     //alert("Please enter a valid date");
+     return false;
+    }
+    return true;
+   }
+
+   function validate_form()
+   {
+    var firstname = document.forms["person"]["firstname"].value;
+    var lastname = document.forms["person"]["lastname"].value;
+    var dateofbirth = document.forms["person"]["dateofbirth"].value;
+    var dateofdeath = document.forms["person"]["dateofdeath"].value;
+    if (firstname == null || firstname == "")
+    {
+     alert("Vous devez entrer un nom prénom.");
+     return false;
+    }
+    else if (lastname == null || lastname == "")
+    {
+     alert("Vous devez entrer un nom de famille.");
+     return false;
+    }
+    else if (dateofbirth != null && dateofbirth != "" && !isDate(dateofbirth))
+    {
+     alert("La date de naissance est invalide.");
+     return false;
+    }
+    else if (dateofdeath != null && dateofdeath != "" && !isDate(dateofdeath))
+    {
+     alert("La date de décès est invalide.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+  <div class="menu">
+    <div class="menu_head">Arbre de {{ tree.user.username }}</div>
+    <div class="menu_items">
+      <a href="/genealogy/{{ tree.id }}/?gen={{ gens }}">Retour</a><br /><br />
+      <div class="red_thin">Les champs en rouge sont requis.</div><br />
+      {% if kid %}
+        <form name="person" action="/genealogy/{{ tree.id }}/person/create/?kid={{ kid }}&gen={{ gens }}" method="post" enctype="multipart/form-data" onsubmit="return validate_form()">
+      {% else %}
+        <form name="person" action="/genealogy/{{ tree.id }}/person/create/?gen={{ gens }}" method="post" enctype="multipart/form-data" onsubmit="return validate_form()">
+      {% endif %}
+          {% csrf_token %}
+          <table class="borderless">
+            {% for field in form %}
+              <tr>
+                <td class="borderless"><label for="{{ field.name }}"{% if "name" in field.label_tag %} class="red_thin"{% endif %}>{{ field.label|safe }}</label></td>
+                <td class="borderless">{{ field }}</td>
+              </tr>
+            {% endfor %}
+
+            <tr>
+              <td class="borderless"></td>
+              <td class="borderless">
+                <input type="submit" value="Créer" /> 
+              </td>
+            </tr>
+          </table>
+        </form>
+    </div>
+  </div>
+{% endblock %}

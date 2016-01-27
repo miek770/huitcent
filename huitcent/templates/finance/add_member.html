@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Ajouter un membre</div>
+  <div class="menu_items">
+   <a href="/finance/{{ group.id }}/">Retour</a><br /><br />
+   <form action="/finance/{{ group.id }}/do_add_member/" method="post">
+    {% csrf_token %}
+    <label for="name">Nom</label><br />
+    <select name="name">
+     {% for user in users %}
+      <option>{{ user.username }}</option>
+     {% endfor %}
+    </select><br />
+    <br /><input type="submit" value="Ajouter" />
+   </form>
+  </div>
+ </div>
+{% endblock %}

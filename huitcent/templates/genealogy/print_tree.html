@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="google-site-verification" content="SzLSqGuYsdOZxeXqKYV78Ck414jTwPvGpUdVhfLGYGg" />
+</head>
+<body>
+
+<canvas id="tree" style="border:1px solid grey">
+    Votre fureteur ne supporte pas HTML5.
+</canvas>
+
+<script type="text/javascript">
+    var canvas = document.getElementById("tree");
+    var ctx = canvas.getContext("2d");
+    var font_height = 14;
+    var x_gap = 10;
+    var y_gap = 40;
+
+    var tree = {{ tree|safe }};
+    
+    function calc_box(name, ctx, top_left, font_height) {
+        ctx.font = font_height + "px Helvetica";
+        var width = ctx.measureText(name).width + 8;
+        var height = font_height + 8;
+        return [top_left[0], top_left[1], width, height];
+    }
+
+    function draw_box(name, ctx, size, font_height) {
+        ctx.font = font_height + "px Helvetica";
+        ctx.strokeStyle = "grey";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(size[0], size[1], size[2], size[3]);
+        ctx.fillText(name, size[0]+4, size[1]+font_height+2);
+        return [[size[0]+size[2]/2, size[1]], // Upper conn
+                [size[0]+size[2]/2, size[1]+size[3]]]; // Lower conn
+    }
+    
+    function draw_straight_line(origin, end, ctx) {
+        ctx.strokeStyle = "grey";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(origin[0], origin[1]);
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    }
+
+    function draw_line(origin, end, ctx) {
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(origin[0], origin[1]);
+        ctx.lineTo(origin[0], origin[1] - (y_gap/2));
+        ctx.lineTo(end[0], origin[1] - (y_gap/2));
+        ctx.lineTo(end[0], end[1]);
+        ctx.stroke();
+    }
+    
+    function last(array) {
+        return array[array.length-1];
+    }
+
+    var line_width = [];
+    var tree_width = [];
+    for (var i=0; i<tree.length; i++) {
+        line_width[i] = -x_gap;
+        tree_width[i] = [];
+        for (var j=0; j<tree[i].length; j++) {
+            tree_width[i][j] = calc_box(tree[i][j],
+                                        ctx,
+                                        [0, 0],
+                                        font_height)[2];
+            line_width[i] += tree_width[i][j];
+            line_width[i] += x_gap;
+        }
+    }
+
+    canvas.width = last(line_width) + x_gap;
+    canvas.height = tree.length*(y_gap + font_height + 8);
+    
+    var left_margin;
+    var top_left = [];
+    var tree_cp = [];
+    for (var i=0; i<tree.length; i++) {
+        tree_cp[i] = []
+        left_margin = 0;
+        for (var j=0; j<tree[i].length; j++) {
+            top_left[1] = i*(font_height + y_gap + 8) + y_gap/2;
+            if (j<1) {
+                top_left[0] = last(line_width) + x_gap;
+                for (var k=0; k<tree[i].length; k++) {
+                    top_left[0] -= tree_width[i][k];
+                    top_left[0] -= x_gap;
+                }
+                top_left[0] /= 2;
+                top_left[0] += x_gap/2
+            }
+            else {
+                top_left[0] = left_margin
+            }
+            left_margin = top_left[0];
+            left_margin += tree_width[i][j];
+            left_margin += x_gap;
+            
+            tree_cp[i][j] = draw_box(tree[i][j],
+                                     ctx,
+                                     calc_box(tree[i][j],
+                                              ctx,
+                                              top_left,
+                                              font_height),
+                                     font_height);
+
+            // Find the person's child, if any (i>0)
+            if (i>0) {
+                var cp = [i-1, Math.floor(j/2)];
+                draw_straight_line(tree_cp[i][j][0],
+                                   tree_cp[cp[0]][cp[1]][1],
+                                   ctx);
+                /*draw_line(tree_cp[i][j][0],
+                          tree_cp[cp[0]][cp[1]][1],
+                          ctx);*/
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

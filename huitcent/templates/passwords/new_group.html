@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+ <script type="text/javascript">
+  <!--
+   function validate_form()
+   {
+    var name = document.forms["group"]["Name"].value;
+    if (name == null || name == "")
+    {
+     alert("Vous devez entrer un nom de groupe.");
+     return false;
+    }
+    else return true;
+   }
+  //-->
+ </script>
+{% endblock %}
+
+{% block content %}
+ <div class="menu">
+  <div class="menu_head">Nouveau groupe</div>
+  <div class="menu_items">
+
+   <a href="/passwords/">Retour</a><br /><br />
+   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+   <form name="group" action="/passwords/create/" method="post" onsubmit="return validate_form()">
+    {% csrf_token %}
+    <label for="name">Nom</label><br />
+    <input type="text" name="Name" maxlength="50" size="40" /><br />
+    <label for="name">Détails</label><br />
+    <input type="text" name="Details" maxlength="100" size="40" /><br />
+    <br /><input type="submit" value="Créer" />
+   </form>
+  </div>
+ </div>
+{% endblock %}
