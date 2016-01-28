@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -16,77 +18,6 @@ def is_member(user, group):
         return True
     except ObjectDoesNotExist:
         return False
-
-def get_debt(user1, user2, group):
-    user1, user2, group = int(user1), int(user2), int(group)
-    debt = Decimal(0)
-    transactions = Transaction.objects.filter(group__id__exact=group)
-    for transaction in transactions:
-        debtors = Debtor.objects.filter(transaction__exact=transaction)
-        if transaction.user.id == user1:
-            user2_debtor = False
-            for debtor in debtors:
-                if debtor.user.id == user2:
-                    debt -= Decimal(transaction.price)/Decimal(len(debtors))
-                    break
-        elif transaction.user.id == user2:
-            user1_debtor = False
-            for debtor in debtors:
-                if debtor.user.id == user1:
-                    user1_debtor = True
-                    debt += Decimal(transaction.price)/Decimal(len(debtors))
-                    break
-    total = debt.quantize(Decimal('.01'))
-    if total>0:
-        html = u'<div class="red">' + unicode(total) + u'$</div><br />'
-    else:
-        html = u'<div class="green">' + unicode(total) + u'$</div><br />'
-
-    # To be revised (tuple of dajax items previously returned)
-    # Obviously we won't be returning html anymore
-    return ('#debt{}'.format(user2), 'innerHTML', html)
-
-def get_transaction(group_id, index):
-    members = User.objects.filter(group__exact=group_id).order_by('username')
-    debts = []
-    for member in members:
-        if not member == request.user:
-            debts.append((member, ))
-
-    debtors_span = len(members)
-    columns = debtors_span + 6
-    base_transaction = Transaction.objects.filter(group__exact=group_id).order_by('-date')[int(index)]
-    if request.user == base_transaction.user:
-        transaction = (base_transaction, [], True)
-    else:
-        transaction = (base_transaction, [], False)
-    transaction[0].price = Decimal(transaction[0].price).quantize(Decimal('.01'))
-    debtors_qty = Debtor.objects.filter(transaction__exact=transaction[0]).count()
-    if debtors_qty > 0:
-        for member in members:
-            try:
-                Debtor.objects.filter(user__exact=member).get(transaction__exact=transaction[0])
-                transaction[1].append((Decimal(transaction[0].price) / Decimal(debtors_qty)).quantize(Decimal('.01')))
-            except ObjectDoesNotExist:
-                transaction[1].append(Decimal(0).quantize(Decimal('.01')))
-
-    html = u'<tr>\n'
-    html += u' <td class="transactions" align="left">' + unicode(transaction[0].user.username) + u'</td>\n'
-    html += u' <td class="transactions" align="left">' + unicode(transaction[0].name) + u'</td>\n'
-    html += u' <td class="transactions" align="left">' + unicode(transaction[0].description) + u'</td>\n'
-    html += u' <td class="transactions" align="center">' + unicode(transaction[0].date.ctime()) + u'</td>\n'
-    html += u' <td class="transactions" align="right">' + unicode(transaction[0].price) + u'$</td>\n'
-    for debt in transaction[1]:
-        html += u' <td class="transactions" align="right">' + unicode(debt) + u'$</td>\n'
-    html += u' <td class="transactions" align="center">\n'
-    if transaction[2]:
-        html += u'  <input type="button" onclick="confirm_del(' + unicode(transaction[0].id) + ')" value="Effacer" />\n'
-    html += u' </td>\n'
-    html += u'</tr>\n'
-
-    # To be revised (tuple of dajax items previously returned)
-    # Obviously we won't be returning html anymore
-    return ('#transactions', 'innerHTML', html)
 
 @login_required()
 def index(request):
@@ -122,17 +53,72 @@ def view_group(request, group_id):
                       template='forum/output.html',
                       args={'output': 'ERROR: Finance - You are not part of this group.'})
 
-    # Create members / debtors list
+    # Génère la liste des membres du groupe, autres que l'utilisateurs principal
     members = User.objects.filter(group__exact=group).order_by('username')
-    debts = []
+    debts = list()
     for member in members:
         if not member == request.user:
-            debts.append((member, ))
+            debts.append([member, None])
     debtors_span = len(members)
     columns = debtors_span + 6
 
-    # Create list of ALL transactions in this group
-    transactions = range(len(Transaction.objects.filter(group__exact=group).order_by('-date')))
+    # Génère la liste des transactions du groupe
+    base_transaction_list = Transaction.objects.filter(group__exact=group_id).order_by('-date')
+    transactions = list()
+
+    for base_transaction in base_transaction_list:
+
+        # L'utilisateur est le créditeur de cette transaction
+        if request.user == base_transaction.user:
+            transaction = [base_transaction, list(), True, None]
+
+        # L'utilisateur est un débiteur de cette transaction
+        else:
+            transaction = [base_transaction, list(), False, None]
+
+        debtors_qty = Debtor.objects.filter(transaction__exact=transaction[0]).count()
+
+        if debtors_qty > 0:
+
+            # Calcule le coût par débiteur pour cette transaction
+            transaction[3] = (Decimal(transaction[0].price) / Decimal(debtors_qty)).quantize(Decimal('.01'))
+
+            for member in members:
+
+                # Le membre est débiteur de cette transaction
+                try:
+                    Debtor.objects.filter(user__exact=member).get(transaction__exact=transaction[0])
+                    transaction[1].append(transaction[3])
+
+                # Le membre n'est pas impliqué sur cette transaction
+                except ObjectDoesNotExist:
+                    transaction[1].append(Decimal(0).quantize(Decimal('.01')))
+
+        transactions.append(transaction)
+
+    # Calcule les dettes combinées
+    for debt in debts:
+        d = Decimal(0)
+        for transaction in transactions:
+
+            # Monte une liste des débiteurs pour cette transaction
+            debtors = Debtor.objects.filter(transaction__exact=transaction[0])
+
+            # L'utilisateur est le créditeur de cette transaction
+            if transaction[2]:
+                for debtor in debtors:
+                    if debtor.user == debt[0]:
+                        d -= transaction[3]
+                        break
+
+            # Le 2e utilisateur est le créditeur de cette transaction
+            elif transaction[0].user == debt[0]:
+                for debtor in debtors:
+                    if debtor.user == request.user:
+                        d += transaction[3]
+                        break
+
+        debts[debts.index(debt)][1] = d
 
     return render(request, template='finance/view_group.html', args={
                   'group': group,

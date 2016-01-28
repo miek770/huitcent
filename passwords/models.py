@@ -12,11 +12,11 @@ class Password(models.Model):
     details = models.CharField(max_length=100)
     user = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
-    group = models.ForeignKey(Group)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
 
 class Account(models.Model):
-  user = models.ForeignKey(User)
-  group = models.ForeignKey(Group)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  group = models.ForeignKey(Group, on_delete=models.CASCADE)
 

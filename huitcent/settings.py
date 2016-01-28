@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "forum",
+    "passwords",
+    "finance",
 ]
 
 LOGIN_REDIRECT_URL = "/forum/"

@@ -18,10 +18,14 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from forum import urls as forum_urls
+from passwords import urls as passwords_urls
+from finance import urls as finance_urls
 
 urlpatterns = [
     url(r'^$', include(forum_urls)),
     url(r'^forum/', include(forum_urls)),
+    url(r'^passwords/', include(passwords_urls)),
+    url(r'^finance/', include(finance_urls)),
     url(r'^admin/', admin.site.urls),
     url(r'^login', auth_views.login),
     url(r'^logout', auth_views.logout),

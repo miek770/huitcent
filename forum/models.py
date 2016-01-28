@@ -16,14 +16,14 @@ class Forum(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=40)
-    forum = models.ForeignKey(Forum)
+    forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
 
 class Topic(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=100)
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     archive = models.BooleanField(default=False)
 
     def get_last_thread(self):
@@ -52,7 +52,7 @@ class Thread(models.Model):
     name = models.CharField(max_length=40)
     date = models.DateTimeField()
     description = models.CharField(max_length=100)
-    topic = models.ForeignKey(Topic)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     archived = models.BooleanField(default=False)
     sticky = models.BooleanField(default=False)
 
@@ -78,7 +78,7 @@ class Post(models.Model):
     message = models.TextField()
     date = models.DateTimeField()
     user = models.ForeignKey(User)
-    thread = models.ForeignKey(Thread)
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
 
     def get_user_posts(self):
         return Post.objects.filter(user__exact=self.user).count()
@@ -95,14 +95,14 @@ class Post(models.Model):
         return self.date.ctime()
 
 class NewPost(models.Model):
-    user = models.ForeignKey(User)
-    post = models.ForeignKey(Post)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     def __str__(self):
         return self.user.username + ' ' + self.post.message[:30]
 
 class Attachment(models.Model):
     name = models.CharField(max_length=100)
-    post = models.ForeignKey(Post)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
 
@@ -122,8 +122,8 @@ class Preference(models.Model):
         return self.user.username
 
 class Right(models.Model):
-    user = models.ForeignKey(User)
-    forum = models.ForeignKey(Forum)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
     access = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
     pending = models.BooleanField(default=True)

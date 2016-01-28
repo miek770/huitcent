@@ -36,7 +36,11 @@ function confirm_del(transaction) {
    <center>
     {% for debt in debts %}
      {{ debt.0.username }}:
-     <span id="debt{{ debt.0.id }}"><br /><b><img src="{% static "loading_small.gif" %}" alt="Calcul en cours..." /></b><br /><br /></span>
+     {% if debt.1 > 0 %}
+      <div class="red">{{ debt.1 }}$</div><br />
+     {% else %}
+      <div class="green">{{ debt.1 }}$</div><br />
+     {% endif %}
     {% endfor %}
    </center><br />
 
@@ -88,13 +92,13 @@ function confirm_del(transaction) {
     </tr>
     {% for transaction in transactions %}
      <tr>
-      <td class='transaction' align='left'>{{ transaction.0.user.username }}</td>
-      <td class='transaction' align='left'>{{ transaction.0.name }}</td>
-      <td class='transaction' align='left'>{{ transaction.0.description }}</td>
-      <td class='transaction' align='right'>{{ transaction.0.date }}</td>
-      <td class='transaction' align='right'>{{ transaction.0.price }}</td>
+      <td class='transactions' align='left'>{{ transaction.0.user.username }}</td>
+      <td class='transactions' align='left'>{{ transaction.0.name }}</td>
+      <td class='transactions' align='left'>{{ transaction.0.description }}</td>
+      <td class='transactions' align='right'>{{ transaction.0.date }}</td>
+      <td class='transactions' align='right'>{{ transaction.0.price }}$</td>
       {% for debt in transaction.1 %}
-      <td class='transaction' align='right'>{{ debt }} $</a>
+      <td class='transactions' align='right'>{{ debt }}$</a>
       {% endfor %}
       <td class='transactions' align='center'>
       {% if transaction.2 %}
@@ -108,13 +112,3 @@ function confirm_del(transaction) {
  </div>
 {% endblock %}
 
-{% block footer %}
- <script type="text/javascript">
-<!--
-
-{% for transaction in transactions %}{% if transaction < 20 %}get_transaction("{{ group.id }}", "{{ transaction }}");{% endif %}{% endfor %}
-{% for debt in debts %}get_debt("{{ user.id }}", "{{ debt.0.id }}", "{{ group.id }}");{% endfor %}
-
-//-->
- </script>
-{% endblock %}
