@@ -55,7 +55,7 @@
       <a href="/forum/edit_preferences/">Préférences</a>
      </div>
     </div>
- 
+
     {% if user.is_staff %}
      <div class="menu" id="admin_menu">
       <div class="menu_head">
@@ -89,12 +89,6 @@
     {% block content %}{% endblock %}
    </div>
   </div>
-  {% if user.username = "Mike" or user.username = "Chantale" %}
-   <script>toggle_todo();</script>
-  {% endif %}
-  {% if user.is_staff %}
-   <script>toggle_admin();</script>
-  {% endif %}
   {% block footer %}{% endblock %}
  </body>
 </html>

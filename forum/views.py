@@ -698,7 +698,3 @@ def do_edit_preferences(request):
         None
     return index(request)
 
-@login_required()
-def log(request, log_name):
-    return render(request, template='forum/output.html', args={'output': get_file(log_name)})
-

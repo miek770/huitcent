@@ -9,7 +9,6 @@ urlpatterns = [
   url(r'^create/$', views.create_forum),
   url(r'^edit_preferences/$', views.edit_preferences),
   url(r'^do_edit_preferences/$', views.do_edit_preferences),
-  url(r'^log/(?P<log_name>[a-zA-Z0-9_\-\.\/]+)/$', views.log),
   url(r'^(?P<new_post_id>\d+)/clear_new_post/$', views.clear_new_post),
   url(r'^(?P<forum_id>\d+)/$', views.view_forum),
   url(r'^(?P<forum_id>\d+)/subscribe/$', views.subscribe_to_forum),

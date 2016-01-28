@@ -1,16 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block javascript %}
-<script type="text/javascript">
-function clear_new_post(new_post)
-{
-    Dajaxice.forum.clear_new_post(Dajax.process, {'new_post': new_post});
-    return true;
-}
-</script>
-{% endblock %}
-
 {% block content %}
  <div class="menu">
   <div class="menu_head">Nouveaux messages</div>
@@ -32,11 +22,9 @@ function clear_new_post(new_post)
     </span>
     {% for new_post in new_post_list %}
      <span id="new_post{{ new_post.5.id }}">
-      <br />{% comment %}
-      <img src="{% static "forum/flush.gif" %}" onclick="clear_new_post({{ new_post.5.id }})" />
-      <br /><a href="/forum/{{ new_post.5.id }}/clear_new_post/"><img class="borderless" src="{% static "forum/x.png" %}" alt="X" /></a>
+      <br />
+      <br /><a href="/forum/{{ new_post.5.id }}/clear_new_post/"><img class="borderless" src="{% static "forum/flush.gif" %}" alt="X" /></a>
       <a href="/forum/{{ new_post.4.id }}/{{ new_post.3.id }}/{{ new_post.2.id }}/#last"><img class="borderless" src="{% static "forum/last_post.gif" %}" alt="Last post:" /></a>
-      {% endcomment %}
       <a href="/forum/{{ new_post.4.id }}/">{{ new_post.4.name }}</a>
       > <a href="/forum/{{ new_post.4.id }}/{{ new_post.3.id }}/">{{ new_post.3.name }}</a>
       > <a href="/forum/{{ new_post.4.id }}/{{ new_post.3.id }}/{{ new_post.2.id }}/#last">{{ new_post.2.name }}</a><br />

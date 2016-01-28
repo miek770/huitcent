@@ -133,17 +133,6 @@ class Right(models.Model):
         else:
             return self.user.username + ' ' + self.forum.name
 
-class ToDo(models.Model):
-    user = models.ForeignKey(User)
-    description = models.CharField(verbose_name='Description', max_length=50)
-    done = models.BooleanField(verbose_name='Done?', default=False)
-    priority = models.IntegerField(verbose_name='Priority', default=3)
-    def __str__(self):
-        if self.done:
-            return 'X-' + self.description
-        else:
-            return self.priority + '-' + self.description
-
 class TopicAdmin(admin.ModelAdmin):
     list_display = ("__str__", "description", "category")
     list_filter = ("archive",)

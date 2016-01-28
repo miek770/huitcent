@@ -12,9 +12,6 @@ from django.middleware.csrf import get_token
 
 from django.conf import settings
 
-def get_todo_list(user):
-    return ToDo.objects.filter(user__exact=user).order_by('done', '-priority', 'description')
-
 def get_hidden_threads():
     delay = (datetime.now()-timedelta(365))
     return Thread.objects.filter(sticky__exact=False).filter(archived__exact=True).filter(date__lte=delay).count()
@@ -114,10 +111,6 @@ def render(request, template, args={}, context=False):
         contribution = round(100.0*Post.objects.filter(user__exact=request.user).count()/post_count,1)
     except ZeroDivisionError:
         contribution = 0.0
-#    dbox_total = get_file("/var/log/dbox.log").split('>')[1].split('\t')[0]
-#    dbox_percent = str(int((float(dbox_total[:-1])/6.5)*100))
-    dbox_total = '0'
-    dbox_percent = '0'
     pref = Preference.objects.get(user__exact=request.user)
     arguments = {
         'user': request.user,
@@ -130,8 +123,6 @@ def render(request, template, args={}, context=False):
         'thread_count': Thread.objects.count(),
         'post_count': post_count,
         'contribution': contribution,
-        'dbox': (dbox_total, dbox_percent),
-        'todo_list': get_todo_list(request.user),
         'pref': pref,
         }
     for key in args.keys():
