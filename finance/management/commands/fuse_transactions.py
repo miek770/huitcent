@@ -14,9 +14,44 @@ class Command(BaseCommand):
     help = "Combine les transactions similaires de plus de X jours (défini en argument)."
 
     def add_arguments(self, parser):
-        parser.add_argument("jours", nargs=1, type=int)
+
+        parser.add_argument("jours",
+                action="store",
+                nargs=1,
+                type=int,
+                help="Fusionne les transactions de plus de X jours",
+                )
+
+        parser.add_argument("-d",
+                "--dry-run",
+                dest="dry",
+                action="store_true",
+                default=False,
+                help="Test (ne fait aucune action)",
+                )
+
+        parser.add_argument("-r",
+                "--reset",
+                dest="reset",
+                action="store_true",
+                default=False,
+                help="Annule toutes les fusions actuelles",
+                )
+
+        parser.add_argument("--verbose",
+                dest="verbose",
+                action="store_true",
+                default=False,
+                help="Imprime davantage de messages pendant l'exécution",
+                )
 
     def handle(self, *args, **options):
+
+        if options["dry"]:
+            self.stdout.write("Mode test (ne modifie pas la base de données).")
+
+        if options["reset"]:
+            self.stdout.write("Annulation des fusions existantes.")
 
         age=timedelta(options["jours"][0])
 
@@ -25,15 +60,21 @@ class Command(BaseCommand):
         for group in groups:
 
             # On débute par effacer toutes les fusions précédentes
-            transactions = Transaction.objects.filter(group__exact=group).filter(fusion__exact=True).delete()
-            transactions = Transaction.objects.filter(group__exact=group).filter(fused__exact=True)
-            for t in transactions:
-                t.fused = False
-                t.fused_into = None
-                t.save()
+            if not options["dry"]:
+                transactions = Transaction.objects.filter(group__exact=group).filter(fusion__exact=True).delete()
+                transactions = Transaction.objects.filter(group__exact=group).filter(fused__exact=True)
+                for t in transactions:
+                    t.fused = False
+                    t.fused_into = None
+                    t.save()
+
+            # Si on est en mode "reset", on passe immédiatement au groupe suivant
+            if options["reset"]:
+                continue
 
             users = User.objects.filter(group__exact=group).order_by("username")
 
+            # Affiche les membres du groupe (débuggage, peut être retiré du script final)
             for user in users:
                 self.stdout.write(user.username)
 
@@ -68,12 +109,14 @@ class Command(BaseCommand):
                             i += 1
 
                         if match:
-                            self.stdout.write("Transaction retenue : {} (par {})".format(transaction.name, creditor))
+                            if options["verbose"]:
+                                self.stdout.write("Transaction retenue : {} (par {})".format(transaction.name, creditor))
                             total += transaction.price
                             fusion += 1
                             to_fuse.append(transaction)
 
-                    if fusion:
+                    # Enregistrement des modifications dans la base de données
+                    if fusion and not options["dry"]:
 
                         self.stdout.write("{} transactions fusionnées, total = {}$".format(fusion, total))
 
