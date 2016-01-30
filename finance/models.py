@@ -6,7 +6,7 @@ class Group(models.Model):
     name = models.CharField(max_length=40)
     users = models.ManyToManyField(User)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class Transaction(models.Model):
@@ -18,9 +18,10 @@ class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     fused = models.BooleanField(default=False)
     fused_into = models.ForeignKey("Transaction", on_delete=models.SET_NULL, blank=True, null=True)
+    fusion = models.BooleanField(default=False)
 
-    def __unicode__(self):
-        return self.name + ' - ' + self.description
+    def __str__(self):
+        return "{} : {}".format(self.name, self.price)
 
     def get_price_per_user(self):
         return self.price/Debtor.objects.filter(transaction__exact=self).count()
@@ -29,5 +30,5 @@ class Debtor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username + ' - ' + self.transaction.name
