@@ -195,6 +195,7 @@ def add_transaction(request, group_id):
             date=timezone.now(),
             price=Decimal(request.POST['price'].replace(',', '.')).quantize(Decimal('.01')),
             user=request.user,
+            fused=False,
             )
     except:
         return render(request, template='forum/output.html', args={'output': 'ERROR: Finance - Invalid data.'})

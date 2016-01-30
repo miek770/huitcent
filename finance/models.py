@@ -16,6 +16,8 @@ class Transaction(models.Model):
     date = models.DateTimeField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    fused = models.BooleanField(default=False)
+    fused_into = models.ForeignKey("Transaction", on_delete=models.SET_NULL, blank=True, null=True)
 
     def __unicode__(self):
         return self.name + ' - ' + self.description
