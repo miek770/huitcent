@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 dest="days",
                 action="store",
                 type=int,
-                default=90,
+                default=180,
                 help="Fusionne les transactions de plus de X jours",
                 )
 
@@ -120,8 +120,8 @@ class Command(BaseCommand):
                         self.stdout.write("{} transactions fusionnées, total = {}$".format(fusion, total))
 
                         tf = Transaction(group=group,
-                                name="Fusion",
-                                description="Transactions de plus de {} jours".format(options["days"]),
+                                name="Vieilles transactions",
+                                description="Transactions fusionnées de plus de {} jours".format(options["days"]),
                                 date=timezone.now()-age,
                                 price=total,
                                 user=creditor,
