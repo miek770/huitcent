@@ -15,23 +15,22 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
 
-        parser.add_argument("jours",
+        parser.add_argument("--days",
+                dest="days",
                 action="store",
-                nargs=1,
                 type=int,
+                default=90,
                 help="Fusionne les transactions de plus de X jours",
                 )
 
-        parser.add_argument("-d",
-                "--dry-run",
+        parser.add_argument("--dry-run",
                 dest="dry",
                 action="store_true",
                 default=False,
                 help="Test (ne fait aucune action)",
                 )
 
-        parser.add_argument("-r",
-                "--reset",
+        parser.add_argument("--reset",
                 dest="reset",
                 action="store_true",
                 default=False,
@@ -53,7 +52,7 @@ class Command(BaseCommand):
         if options["reset"]:
             self.stdout.write("Annulation des fusions existantes.")
 
-        age=timedelta(options["jours"][0])
+        age=timedelta(options["days"])
 
         groups = Group.objects.all()
 
@@ -61,7 +60,7 @@ class Command(BaseCommand):
 
             # On débute par effacer toutes les fusions précédentes
             if not options["dry"]:
-                transactions = Transaction.objects.filter(group__exact=group).filter(fusion__exact=True).delete()
+                Transaction.objects.filter(group__exact=group).filter(fusion__exact=True).delete()
                 transactions = Transaction.objects.filter(group__exact=group).filter(fused__exact=True)
                 for t in transactions:
                     t.fused = False
@@ -122,7 +121,7 @@ class Command(BaseCommand):
 
                         tf = Transaction(group=group,
                                 name="Fusion",
-                                description="Transactions de plus de {} jours".format(options["jours"][0]),
+                                description="Transactions de plus de {} jours".format(options["days"]),
                                 date=timezone.now()-age,
                                 price=total,
                                 user=creditor,
@@ -130,6 +129,12 @@ class Command(BaseCommand):
                                 fusion=True,
                                 )
                         tf.save()
+
+                        i=0
+                        for debtor in case:
+                            if debtor:
+                                Debtor(user=users[i], transaction=tf).save()
+                            i += 1
 
                         for t in to_fuse:
                             t.fused = True

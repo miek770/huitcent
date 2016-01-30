@@ -63,18 +63,24 @@ def view_group(request, group_id):
     columns = debtors_span + 6
 
     # Génère la liste des transactions du groupe
-    base_transaction_list = Transaction.objects.filter(group__exact=group_id).order_by('-date')
+    base_transaction_list = Transaction.objects.filter(group__exact=group_id).filter(fused__exact=False).order_by('-date')
     transactions = list()
 
     for base_transaction in base_transaction_list:
 
+        # transaction = [objet Transaction,
+        #                liste de débits (en $),
+        #                l'utilisateur est-il le créditeur?,
+        #                coût par débiteur,
+        #                liste de sous-transactions (fusionnées)]
+
         # L'utilisateur est le créditeur de cette transaction
         if request.user == base_transaction.user:
-            transaction = [base_transaction, list(), True, None]
+            transaction = [base_transaction, list(), True, None, list()]
 
         # L'utilisateur est un débiteur de cette transaction
         else:
-            transaction = [base_transaction, list(), False, None]
+            transaction = [base_transaction, list(), False, None, list()]
 
         debtors_qty = Debtor.objects.filter(transaction__exact=transaction[0]).count()
 
@@ -93,6 +99,10 @@ def view_group(request, group_id):
                 # Le membre n'est pas impliqué sur cette transaction
                 except ObjectDoesNotExist:
                     transaction[1].append(Decimal(0).quantize(Decimal('.01')))
+
+        # Si la transaction est une fusion, lui annexer les transactions fusionnées
+        if transaction[0].fusion:
+            transaction[4] = Transaction.objects.filter(fused_into__exact=transaction[0]).order_by("-date")
 
         transactions.append(transaction)
 
