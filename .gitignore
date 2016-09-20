@@ -2,5 +2,5 @@ sqlite3.db
 *.pyc
 .dump
 huitcent/settings.py
-static/*
-media/*
+static/admin
+media
