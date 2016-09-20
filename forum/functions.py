@@ -127,5 +127,5 @@ def render(request, template, args={}, context=False):
         }
     for key in args.keys():
         arguments[key] = args[key]
-    return render_to_response(template, arguments, context_instance=RequestContext(request))
+    return render_to_response(template, arguments)
 
