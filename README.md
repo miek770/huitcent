@@ -1,16 +1,27 @@
 # Huitcent
 
-Mise à jour majeure du forum et des applications connexes. Essentiellement Django passe de la version 1.6 à la version 1.9, qui élimine plusieurs fonctions désuètes, et les applications vont abandonner Dajax et Dajaxice.
+Mise à jour majeure du forum et des applications connexes. Essentiellement Django a passé de la version 1.6 à la version 1.9, qui élimine plusieurs fonctions désuètes, et les applications ont abandonneé Dajax et Dajaxice. Les fonctions ont été remplacées par du javascript, lorsque possible, et des requêtes standard (GET/POST) autrement.
 
-Les fonctions seront remplacées par du javascript, lorsque possible, et des requêtes standard (GET/POST) autrement.
+## À faire
 
-## Statut
+- Revoir la fonction render dans forum.fonctions. C'est un wrapper autour de render_to_response mais celle-ci disparaîtra dans la version 2.0 de Django. La fonction render a été créée depuis dans Django et il faudrait réévaluer le besoin d'une version maison.
 
-- J'ai temporairement désactivé la liste de tâches. Je ne suis pas sûr que ça vaille la peine de la recréer, je vais demander à Chantale si elle l'utilise vraiment;
-- Je suis rendu à ajouter un --dry-run à ma commande de fusion, et à tester avec les données réelles du forum;
-- Ensuite il faudra l'intégrer aux templates et aux vues dans views.py.
+## Mise à jour de Django
 
-## Pour la migration de finance
+Suivre les instructions de Django pour la version à mettre à jour. Toujours tester la migration sur le site de développement avant du site de production. Pour mettre à jour le site de production, exécuter (idéalement préciser la version de Django) :
+
+    cd /srv/http/huitcent
+    sudo systemctl stop forum
+    sudo su html
+    source bin/activate
+    cd huitcent
+    python -Wall manage.py test
+    pip install -U django
+    python manage.py makemigrations
+    python manage.py migrate
+    python manage.py collectstatic
+
+### Pour la migration de finance
 
 J'ai eu plusieurs problèmes avec la migration de la base de données, à cause de l'application finance. Finalement ce que j'ai fait c'est de modifier manuellement la base de données précédente, puis de faire la migration manuellement :
 
