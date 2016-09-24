@@ -58,7 +58,7 @@ def save_group(request, group_id):
     grp = get_object_or_404(Group, pk=group_id)
 
     # Vérifie que l'utilisateur a accès à ce groupe
-    if request.user != get_object_or_404(Account, grp=group_id).user:
+    if request.user != get_object_or_404(Account, group=group_id).user:
         return redirect('/passwords')
 
     grp.name = request.POST['Name']
@@ -113,7 +113,7 @@ def create_password(request, group_id):
     grp = get_object_or_404(Group, pk=group_id)
 
     # Vérifie que l'utilisateur a accès à ce groupe
-    if request.user != get_object_or_404(Account, grp=group_id).user:
+    if request.user != get_object_or_404(Account, group=group_id).user:
         return redirect('/passwords')
 
     pwd = Password()
@@ -130,7 +130,7 @@ def edit_password(request, group_id, password_id):
     group = get_object_or_404(Group, pk=group_id)
 
     # Vérifie que l'utilisateur a accès à ce groupe
-    if request.user != get_object_or_404(Account, grp=group_id).user:
+    if request.user != get_object_or_404(Account, group=group_id).user:
         return redirect('/passwords')
 
     password = get_object_or_404(Password, pk=password_id)
@@ -142,7 +142,7 @@ def save_password(request, group_id, password_id):
     grp = get_object_or_404(Group, pk=group_id)
 
     # Vérifie que l'utilisateur a accès à ce groupe
-    if request.user != get_object_or_404(Account, grp=group_id).user:
+    if request.user != get_object_or_404(Account, group=group_id).user:
         return redirect('/passwords')
 
     pwd = get_object_or_404(Password, pk=password_id)
@@ -158,9 +158,10 @@ def do_delete_password(request, group_id, password_id):
     grp = get_object_or_404(Group, pk=group_id)
 
     # Vérifie que l'utilisateur a accès à ce groupe
-    if request.user != get_object_or_404(Account, grp=group_id).user:
+    if request.user != get_object_or_404(Account, group=group_id).user:
         return redirect('/passwords')
 
     pwd = get_object_or_404(Password, pk=password_id)
     pwd.delete()
     return group(request, group_id)
+
