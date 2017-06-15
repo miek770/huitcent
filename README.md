@@ -4,7 +4,9 @@ Mise à jour majeure du forum et des applications connexes. Essentiellement Djan
 
 ## À faire
 
-- Revoir la fonction render dans forum.fonctions. C'est un wrapper autour de render_to_response mais celle-ci disparaîtra dans la version 2.0 de Django. La fonction render a été créée depuis dans Django et il faudrait réévaluer le besoin d'une version maison.
+- Revoir la fonction render dans forum.fonctions. C'est un wrapper autour de render_to_response mais celle-ci disparaîtra dans la version 2.0 de Django. La fonction render a été créée depuis dans Django et il faudrait réévaluer le besoin d'une version maison;
+- Compléter les mises à jour jusqu'à la version 1.11 (LTS);
+- Transférer la base de données sur Postgresql sur le odroid.
 
 ## Mise à jour de Django
 
@@ -33,4 +35,4 @@ J'ai eu plusieurs problèmes avec la migration de la base de données, à cause 
     $ python manage.py makemigrations
     $ python manage.py migrate
 
-Ce que j'ai constaté par la suite c'est que j'ai probablement fait une migration alors que mon modèle de Transaction dans finance/models.py était mal défini. Je crois donc que je pourrais simplement effacer les migrations enregistrées dans finance/migrations/* et que la migration fonctionnerait alors très bien.
+Ce que j'ai constaté par la suite c'est que j'ai probablement fait une migration alors que mon modèle de Transaction dans finance/models.py était mal défini. Je crois donc que je pourrais simplement effacer les migrations enregistrées dans finance/migrations et que la migration fonctionnerait alors très bien.
