@@ -2,11 +2,10 @@
 
 Mise à jour majeure du forum et des applications connexes. Essentiellement Django a passé de la version 1.6 à la version 1.9, qui élimine plusieurs fonctions désuètes, et les applications ont abandonneé Dajax et Dajaxice. Les fonctions ont été remplacées par du javascript, lorsque possible, et des requêtes standard (GET/POST) autrement.
 
-Maintenant rendu à Django 1.10.
+Maintenant rendu à Django 1.11.2.
 
 ## À faire
 
-- Compléter les mises à jour jusqu'à la version 1.11 (LTS);
 - Transférer la base de données sur Postgresql sur le odroid.
 
 ## Mise à jour de Django
@@ -19,7 +18,7 @@ Suivre les instructions de Django pour la version à mettre à jour. Toujours te
     source bin/activate
     cd huitcent
     python -Wall manage.py test
-    pip install Django==x.x.x
+    pip install Django==1.11.3
     python manage.py makemigrations
     python manage.py migrate
     python manage.py collectstatic
