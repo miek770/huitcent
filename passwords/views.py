@@ -32,7 +32,7 @@ def group(request, group_id):
 
 @login_required()
 def new_group(request):
-    return render(request, 'passwords/new_group.html', context=True)
+    return render(request, 'passwords/new_group.html')
 
 @login_required()
 def create_group(request):
@@ -51,7 +51,7 @@ def edit_group(request, group_id):
     if request.user != get_object_or_404(Account, group=group_id).user:
         return redirect('/passwords')
 
-    return render(request, 'passwords/edit_group.html', {'group': group}, context=True)
+    return render(request, 'passwords/edit_group.html', {'group': group})
 
 @login_required()
 def save_group(request, group_id):
@@ -106,7 +106,7 @@ def new_password(request, group_id):
     if request.user != get_object_or_404(Account, group=group_id).user:
         return redirect('/passwords')
 
-    return render(request, 'passwords/new_password.html', {'group': group}, context=True)
+    return render(request, 'passwords/new_password.html', {'group': group})
 
 @login_required()
 def create_password(request, group_id):
@@ -135,7 +135,7 @@ def edit_password(request, group_id, password_id):
 
     password = get_object_or_404(Password, pk=password_id)
     forum_list = Forum.objects.all().order_by('name')
-    return render(request, 'passwords/edit_password.html', {'group': group, 'password': password}, context=True)
+    return render(request, 'passwords/edit_password.html', {'group': group, 'password': password})
 
 @login_required()
 def save_password(request, group_id, password_id):

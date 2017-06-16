@@ -75,7 +75,7 @@ def view_forum(request, forum_id):
 
 @login_required()
 def new_forum(request):
-    return render(request, template='forum/new_forum.html', context=True)
+    return render(request, template='forum/new_forum.html')
 
 @login_required()
 def create_forum(request):
@@ -85,7 +85,7 @@ def create_forum(request):
         message = "Erreur : Vous devez entrer un nom de forum."
         return render(request, template="forum/new_forum.html", args={
             "message": message,
-            }, context=True)
+            })
 
 
     # Check if this forum name is already taken
@@ -95,7 +95,7 @@ def create_forum(request):
             message = "Error: That forum name is already used."
             return render(request, template='forum/new_forum.html', args={
                 "message": message
-                }, context=True)
+                })
 
     # Otherwise, create it
     f = Forum(name=request.POST['name'])
@@ -135,7 +135,7 @@ def new_category(request, forum_id):
     forum = Forum.objects.get(pk=forum_id)
     return render(request, template="forum/new_category.html", args={
         "forum": forum
-        }, context=True)
+        })
 
 @login_required()
 def create_category(request, forum_id):
@@ -155,7 +155,7 @@ def create_category(request, forum_id):
         return render(request, template="forum/new_category.html", args={
             "forum": forum,
             "message": message,
-            }, context=True)
+            })
 
     # Check if this category name is already taken
     category_list = Category.objects.filter(forum__exact=forum)
@@ -165,7 +165,7 @@ def create_category(request, forum_id):
             return render(request, template="forum/new_category.html", args={
                 "forum": forum,
                 "message": message,
-                }, context=True)
+                })
 
     # Otherwise, create it
     c = Category(name=request.POST['name'], forum=forum)
@@ -227,7 +227,7 @@ def new_topic(request, forum_id):
     return render(request, template="forum/new_topic.html", args={
         "forum": forum,
         "category_list": category_list
-        }, context=True)
+        })
 
 @login_required()
 def create_topic(request, forum_id):
@@ -247,7 +247,7 @@ def create_topic(request, forum_id):
         return render(request, template="forum/new_topic.html", args={
             "forum": forum,
             "message": message,
-            }, context=True)
+            })
 
     # Check if the topic name is already taken in this category
     category = Category.objects.get(pk=request.POST['category'])
@@ -258,7 +258,7 @@ def create_topic(request, forum_id):
             return render(request, template="forum/new_topic.html", args={
                 "forum": forum,
                 "message": message
-                }, context=True)
+                })
 
     # Otherwise, create it
     t = Topic(name=request.POST['name'], description=request.POST['description'], category=category)
@@ -307,7 +307,7 @@ def edit_topic(request, forum_id, topic_id):
     return render(request, template='forum/edit_topic.html', args={
         "forum": forum,
         "topic": topic,
-        }, context=True)
+        })
 
 @login_required()
 def do_edit_topic(request, forum_id, topic_id):
@@ -349,7 +349,7 @@ def view_thread(request, forum_id, topic_id, thread_id):
         "page": page,
         "page_list": page_list,
         "right": right,
-        }, context=True)
+        })
 
 @login_required()
 def new_thread(request, forum_id, topic_id):
@@ -363,7 +363,7 @@ def new_thread(request, forum_id, topic_id):
     return render(request, template='forum/new_thread.html', args={
         'forum': forum,
         'topic': topic,
-        }, context=True)
+        })
 
 @login_required()
 def create_thread(request, forum_id, topic_id):
@@ -385,7 +385,7 @@ def create_thread(request, forum_id, topic_id):
             'forum': forum,
             'topic': topic,
             "message": message,
-            }, context=True)
+            })
 
     # Check if the thread name is already taken
     thread_list = Thread.objects.filter(topic__exact=topic)
@@ -396,7 +396,7 @@ def create_thread(request, forum_id, topic_id):
                 'forum': forum,
                 'topic': topic,
                 'message': message,
-                }, context=True)
+                })
 
     # Otherwise, create it
     t = Thread(name=request.POST['name'], description=request.POST['description'], topic=topic, date=timezone.now())
@@ -457,7 +457,7 @@ def edit_thread(request, forum_id, topic_id, thread_id):
         'forum': forum,
         'topic': topic,
         'thread': thread,
-        }, context=True)
+        })
 
 @login_required()
 def do_edit_thread(request, forum_id, topic_id, thread_id):
@@ -499,7 +499,7 @@ def new_post(request, forum_id, topic_id, thread_id):
     forum = Forum.objects.get(pk=forum_id)
     topic = Topic.objects.get(pk=topic_id)
     thread = Thread.objects.get(pk=thread_id)
-    return render(request, template='forum/new_post.html', args={'forum': forum, 'topic': topic, 'thread': thread}, context=True)
+    return render(request, template='forum/new_post.html', args={'forum': forum, 'topic': topic, 'thread': thread})
 
 @login_required()
 def create_post(request, forum_id, topic_id, thread_id):
@@ -563,7 +563,7 @@ def edit_post(request, forum_id, topic_id, thread_id, post_id):
         'thread': thread,
         'post': post,
         'existing_post': existing_post,
-        }, context=True)
+        })
 
 @login_required()
 def reply_post(request, forum_id, topic_id, thread_id, post_id):
@@ -583,7 +583,7 @@ def reply_post(request, forum_id, topic_id, thread_id, post_id):
         'thread': thread,
         'post': post,
         'quoted_post': quoted_post,
-        }, context=True)
+        })
 
 @login_required()
 def do_edit_post(request, forum_id, topic_id, thread_id, post_id):
@@ -613,7 +613,7 @@ def search(request, forum_id):
     forum = Forum.objects.get(pk=forum_id)
     return render(request, template="forum/search.html", args={
         "forum": forum,
-        }, context=True)
+        })
 
 @login_required()
 def do_search(request, forum_id):
@@ -629,7 +629,7 @@ def do_search(request, forum_id):
         return render(request, template="forum/search.html", args={
             "forum": forum,
             "message": message,
-            }, context=True)
+            })
     # Recherche de posts
     base_post_list = Post.objects.filter(thread__topic__category__forum__id__exact=forum_id).order_by("-date")
     for tag in tags:
@@ -679,7 +679,7 @@ def edit_preferences(request):
     preferences = Preference.objects.get(user__exact=request.user)
     return render(request, template='forum/edit_preferences.html', args={
         'preferences': preferences,
-        }, context=True)
+        })
 
 @login_required()
 def do_edit_preferences(request):

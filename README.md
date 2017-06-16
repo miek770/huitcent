@@ -2,9 +2,10 @@
 
 Mise à jour majeure du forum et des applications connexes. Essentiellement Django a passé de la version 1.6 à la version 1.9, qui élimine plusieurs fonctions désuètes, et les applications ont abandonneé Dajax et Dajaxice. Les fonctions ont été remplacées par du javascript, lorsque possible, et des requêtes standard (GET/POST) autrement.
 
+Maintenant rendu à Django 1.10.
+
 ## À faire
 
-- Revoir la fonction render dans forum.fonctions. C'est un wrapper autour de render_to_response mais celle-ci disparaîtra dans la version 2.0 de Django. La fonction render a été créée depuis dans Django et il faudrait réévaluer le besoin d'une version maison;
 - Compléter les mises à jour jusqu'à la version 1.11 (LTS);
 - Transférer la base de données sur Postgresql sur le odroid.
 
@@ -18,7 +19,7 @@ Suivre les instructions de Django pour la version à mettre à jour. Toujours te
     source bin/activate
     cd huitcent
     python -Wall manage.py test
-    pip install -U django
+    pip install Django==x.x.x
     python manage.py makemigrations
     python manage.py migrate
     python manage.py collectstatic

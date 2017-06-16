@@ -3,7 +3,7 @@
 from forum.models import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
-from django.shortcuts import render_to_response
+from django.shortcuts import render as dj_render
 from django.template import RequestContext
 import math, os, re, subprocess, time
 from datetime import datetime, timedelta
@@ -104,7 +104,7 @@ def get_file(filename, raw=False):
     else:
         return output.replace('\n', '<br />')
 
-def render(request, template, args={}, context=False):
+def render(request, template, args={}):
     get_token(request)
     post_count = Post.objects.count()
     try:
@@ -127,5 +127,5 @@ def render(request, template, args={}, context=False):
         }
     for key in args.keys():
         arguments[key] = args[key]
-    return render_to_response(template, arguments, context_instance=RequestContext(request))
+    return dj_render(request, template, arguments)
 

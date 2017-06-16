@@ -137,11 +137,11 @@ def view_group(request, group_id):
                   'columns': columns,
                   'transactions': transactions,
                   'debts': debts,
-                  }, context=True)
+                  })
 
 @login_required()
 def new_group(request):
-    return render(request, template='finance/new_group.html', context=True)
+    return render(request, template='finance/new_group.html')
 
 @login_required()
 def create_group(request):
@@ -153,7 +153,7 @@ def create_group(request):
             message = "Erreur : Ce nom de groupe est déjà utilisé."
             return render(request, template="finance/new_group.html", args={
                 'message': message,
-                }, context=True)
+                })
 
     # Otherwise, create it
     group = Group(name=request.POST['Name'])
@@ -173,7 +173,7 @@ def add_member(request, group_id):
     return render(request, template='finance/add_member.html', args={
         'group': group,
         'users': users,
-        }, context=True)
+        })
 
 @login_required()
 def do_add_member(request, group_id):
