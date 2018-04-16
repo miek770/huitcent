@@ -3,7 +3,7 @@ Description=Forum huitcent
 After=network.target
 
 [Service]
-ExecStartPre=/bin/rm -rf /var/run/forum ; /bin/mkdir /var/run/forum ; /bin/chown -R html:html /var/run/forum ; /bin/mount -t nfs4 -o nfsvers=4 bbbdata:/Media /srv/http/huitcent/huitcent/media
+ExecStartPre=/bin/rm -rf /var/run/forum ; /bin/mkdir /var/run/forum ; /bin/chown -R html:html /var/run/forum ; /bin/mount -t nfs4 -o nfsvers=4 odroid:/Media /srv/http/huitcent/huitcent/media
 ExecStart=/bin/bash -c "source /srv/http/huitcent/bin/activate ; /srv/http/huitcent/bin/uwsgi --chdir=/srv/http/huitcent/huitcent --module=huitcent.wsgi:application --env DJANGO_SETTINGS_MODULE=huitcent.settings --socket /var/run/forum/forum.sock --chmod-socket --processes=1 --uid=html --gid=html --logto=/var/log/forum.log"
 ExecStop=/bin/rm -rf /var/run/forum ; /bin/umount /srv/http/huitcent/huitcent/media
 Restart=on-failure
