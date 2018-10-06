@@ -77,7 +77,7 @@ class Thread(models.Model):
 class Post(models.Model):
     message = models.TextField()
     date = models.DateTimeField()
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
 
     def get_user_posts(self):
@@ -107,13 +107,13 @@ class Attachment(models.Model):
         return self.name
 
 class Avatar(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     def __str__(self):
         return self.user.username
 
 class Preference(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     posts_per_page = models.IntegerField(default=10)
     threads_per_page = models.IntegerField(default=10)
     show_todo = models.BooleanField(default=False)
