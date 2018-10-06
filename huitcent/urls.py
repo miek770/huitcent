@@ -21,9 +21,11 @@ from forum import urls as forum_urls
 from passwords import urls as passwords_urls
 from finance import urls as finance_urls
 
+# Basé sur http://sjoerdjob.com/post/reusing-django-include-urls-for-index/
+
 urlpatterns = [
-    url(r'^$', include(forum_urls)),
     url(r'^forum/', include(forum_urls)),
+    url(r'^\Z', include(forum_urls)),
     url(r'^passwords/', include(passwords_urls)),
     url(r'^finance/', include(finance_urls)),
     url(r'^admin/', admin.site.urls),
