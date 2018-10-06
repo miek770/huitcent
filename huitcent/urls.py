@@ -29,6 +29,6 @@ urlpatterns = [
     url(r'^passwords/', include(passwords_urls)),
     url(r'^finance/', include(finance_urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^login', auth_views.login),
-    url(r'^logout', auth_views.logout),
+    url(r'^login', auth_views.LoginView.as_view(template_name="registration/login.html"), name="login"),
+    url(r'^logout', auth_views.LogoutView.as_view(template_name="registration/logout.html"), name="logout"),
 ]
