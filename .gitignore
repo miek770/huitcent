@@ -1,7 +1,10 @@
 sqlite3.db
+sqlite3.db.*
 *.csv
 *.pyc
 .dump
 huitcent/settings.py
 static/admin
 media
+*/migrations*
+django_admin_log

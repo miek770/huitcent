@@ -27,6 +27,7 @@ class Transaction(models.Model):
         return self.price/Debtor.objects.filter(transaction__exact=self).count()
 
 class Debtor(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
 
