@@ -4,7 +4,7 @@ sqlite3.db.*
 *.pyc
 .dump
 huitcent/settings.py
-static/admin
+static
 media
 */migrations*
 django_admin_log
