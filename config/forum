@@ -1,0 +1,32 @@
+##
+# HTTPS Servers
+##
+
+# Forum
+server {
+    listen          443 default_server ssl;
+    server_name     huitcent.homeip.net;
+    root            /srv/forum;
+
+    add_header      Strict-Transport-Security "max-age=15768000; includeSubdomains; preload";
+
+    rewrite         ^/robots.txt$ /static/robots.txt last;
+    rewrite         ^/favicon.ico$ /static/favicon.ico last;
+
+    location / {
+        uwsgi_pass  unix:/var/run/forum/forum.sock;
+        include     uwsgi_params;
+    }
+
+    location /static {
+        try_files   $uri $uri/ /;
+    }
+
+    location /media {
+        try_files   $uri $uri/ /;
+    }
+
+
+    ssl_certificate /etc/letsencrypt/live/huitcent.homeip.net/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/huitcent.homeip.net/privkey.pem; # managed by Certbot
+}
