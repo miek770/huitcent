@@ -21,6 +21,9 @@ from forum import urls as forum_urls
 from passwords import urls as passwords_urls
 from finance import urls as finance_urls
 
+from huitcent import settings
+from django.conf.urls.static import static
+
 # Basé sur http://sjoerdjob.com/post/reusing-django-include-urls-for-index/
 
 urlpatterns = [
@@ -31,4 +34,4 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login', auth_views.LoginView.as_view(template_name="registration/login.html"), name="login"),
     url(r'^logout', auth_views.LogoutView.as_view(template_name="registration/logout.html"), name="logout"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
