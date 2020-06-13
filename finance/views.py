@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from django.template import RequestContext
 from finance.models import *
 from forum.functions import *
 from django.contrib.auth.decorators import login_required

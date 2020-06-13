@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
-#from django.core.urlresolvers import reverse
-from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from django.template import RequestContext
 from forum.models import *
 from forum.functions import *
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.utils import timezone
-import math
+from math import ceil
 
 @login_required
 def index(request):
@@ -188,7 +182,7 @@ def view_topic(request, forum_id, topic_id):
     except ValueError:
         page = 1.0
     thread_count = Thread.objects.filter(topic__exact=topic_id).count()
-    pages = math.ceil(float(thread_count)/pref.threads_per_page)
+    pages = ceil(float(thread_count)/pref.threads_per_page)
     if pages == 0.0:
         pages = 1.0
     if (page == 0.0) or (page > pages):
@@ -435,7 +429,7 @@ def do_delete_thread(request, forum_id, topic_id, thread_id):
     except ValueError:
         page = 1.0
     thread_count = Thread.objects.filter(topic__exact=topic_id).count()
-    pages = math.ceil(float(thread_count)/pref.threads_per_page)
+    pages = ceil(float(thread_count)/pref.threads_per_page)
     if pages == 0.0:
         pages = 1.0
     if (page == 0.0) or (page > pages):
