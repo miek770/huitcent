@@ -1,12 +1,27 @@
 [Unit]
-Description=Forum huitcent
+Description=Forum huitcent (Gunicorn via uv)
 After=network.target
 
 [Service]
+# Création du répertoire de socket
 ExecStartPre=/bin/rm -rf /var/run/forum ; /bin/mkdir /var/run/forum ; /bin/chown -R forum:forum /var/run/forum
-ExecStart=/bin/bash -c "source /srv/forum/bin/activate ; /srv/forum/bin/uwsgi --chdir=/srv/forum --module=huitcent.wsgi:application --env DJANGO_SETTINGS_MODULE=huitcent.settings --socket /var/run/forum/forum.sock --chmod-socket --processes=1 --uid=forum --gid=forum --logto=/var/log/forum.log"
+
+# Lancement de Gunicorn via uv run
+WorkingDirectory=/srv/forum
+ExecStart=/home/forum/.local/bin/uv run gunicorn huitcent.wsgi:application \
+	--bind unix:/var/run/forum/forum.sock \
+	--chdir /srv/forum \
+	--user forum --group forum \
+	--workers 2 \
+	--timeout 30 \
+	--log-file /var/log/forum.log
+
+# Nettoyage à l'arrêt
 ExecStop=/bin/rm -rf /var/run/forum
+
 Restart=on-failure
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

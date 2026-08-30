@@ -3,7 +3,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.contrib.admin import SimpleListFilter
 from django.forms import ModelForm, CharField
 from django.utils import timezone
